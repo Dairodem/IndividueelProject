@@ -17,11 +17,41 @@ namespace IndividueelProject
     /// <summary>
     /// Interaction logic for MagazijnWindow.xaml
     /// </summary>
+    /// 
+
+    /*-------------------------------TO DO---------------------------------
+
+     * overzichtTab uitwerken
+     * -listview van stock/klanten/leveranciers
+     * -Sorteer opties
+     * -Filter opties
+     * -zoeken op ...
+     * 
+     * 
+     * databeheerTab uitwerken (voor admin)
+     * -personeel toevoegen/bewerken/verwijderen
+     * -product  toevoegen/bewerken/verwijderen
+     * -klant toevoegen/bewerken/verwijderen
+     * -leverancier toevoegen/bewerken/verwijderen
+     * -catergorie toevoegen/bewerken/verwijderen
+     * -subcategorie toevoegen/bewerken/verwijderen
+     * 
+     * bestellingTab uitwerken
+     *-list van leveranciers/klanten
+     *-list van producten uit stock / bij leverancier met aantal
+     *-keuze voor quantiteit 
+     *-totale prijs
+     *
+     * 
+     */
+
+
     public partial class MagazijnWindow : Window
     {
         public MagazijnWindow()
         {
             InitializeComponent();
         }
+
     }
 }

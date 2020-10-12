@@ -161,6 +161,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Logo_FG.png" />
+    <Resource Include="Logo_FGsmall.png" />
+    <Resource Include="Logo_BG.png" />
+    <Resource Include="BackGroundLogo.png" />
+    <Resource Include="warehouse_icon.png" />
+    <Resource Include="Images\warehouse.png" />
+    <Resource Include="Images\warehouse_icon.png" />
     <Content Include="MagazijnDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MagazijnDataModel.Context.cs</LastGenOutput>

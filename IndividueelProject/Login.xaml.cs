@@ -18,6 +18,8 @@ namespace IndividueelProject
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
     public partial class Login : Window
     {
         public Login()
@@ -44,7 +46,9 @@ namespace IndividueelProject
                     if (user.Wachtwoord == TxtPass.Text)
                     {
                         MagazijnWindow magazijnWindow = new MagazijnWindow();
+                        magazijnWindow.Owner = Application.Current.MainWindow;
                         magazijnWindow.Show();
+                        magazijnWindow.Owner = null;
                         Close();
                     }
                     else
