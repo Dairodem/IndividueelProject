@@ -22,7 +22,7 @@ namespace IndividueelProject
     /*-------------------------------TO DO---------------------------------
 
      * overzichtTab uitwerken
-     * -listview van stock/klanten/leveranciers
+     * -opmaak verbeteren zodat alles zichtbaar is
      * -Sorteer opties
      * -Filter opties
      * -zoeken op ...
@@ -68,8 +68,60 @@ namespace IndividueelProject
             
             CbxSort.ItemsSource = sortDict.Keys;
             CbxSort.SelectedIndex = 0;
-        }
 
+            tabOverzicht.Width = Width / 4;
+            tabData.Width = Width / 4;
+            tabBestelling.Width = Width / 4;
+        }
+        private void ChangeColumns(string view)
+        {
+            switch (view)
+            {
+                case "Stock":
+                    colID.DisplayMemberBinding = new Binding("ps.s.Id");
+                    col1.DisplayMemberBinding = new Binding("Naam");
+                    col1.Header = "Cat.";
+                    col2.DisplayMemberBinding = new Binding("ps.p.Naam");
+                    col2.Header = "Naam";
+                    col3.DisplayMemberBinding = new Binding("ps.s.Aantal");
+                    col3.Header = "Aantal";
+                    col4.DisplayMemberBinding = new Binding("ps.p.Eenheid");
+                    col4.Header = "Eenheid";
+                    col5.DisplayMemberBinding = new Binding("ps.p.Inkoopprijs");
+                    col5.Header = "Inkoopprijs";
+                    col6.DisplayMemberBinding = new Binding("ps.p.Marge");
+                    col6.Header = "Marge";
+                    break;
+                case "Klanten":
+                    colID.DisplayMemberBinding = new Binding("Id");
+                    col1.DisplayMemberBinding = new Binding("Bedrijf");
+                    col1.Header = "Bedrijf";
+                    col1.Width = 200;
+                    col2.DisplayMemberBinding = new Binding("Telefoonnummer");
+                    col2.Header = "Telefoonnummer";
+                    col2.Width = 100;
+                    col3.DisplayMemberBinding = new Binding("AangemaaktOp");
+                    col3.Header = "Aangemaakt op";
+                    break;
+                case "Leveranciers":
+                    colID.DisplayMemberBinding = new Binding("Id");
+                    col1.DisplayMemberBinding = new Binding("Bedrijf");
+                    col1.Header = "Bedrijf";
+                    col2.DisplayMemberBinding = new Binding("Telefoonnummer");
+                    col2.Header = "Tel.";
+                    col3.DisplayMemberBinding = new Binding("Emailadres");
+                    col3.Header = "Emailadres";
+                    col4.DisplayMemberBinding = new Binding("Straatnaam");
+                    col4.Header = "Straat";
+                    col5.DisplayMemberBinding = new Binding("Huisnummer");
+                    col5.Header = "Huisnummer";
+                    col6.DisplayMemberBinding = new Binding("Bus");
+                    col6.Header = "Bus";
+                    break;
+                default:
+                    break;
+            }
+        }
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
@@ -78,19 +130,7 @@ namespace IndividueelProject
                 switch (CbxOverzicht.SelectedItem.ToString())
                 {
                     case "Stock":
-                        //kolom namen veranderen
-                        colID.DisplayMemberBinding = new Binding("ps.p.Id");
-                        col1.DisplayMemberBinding = new Binding("Naam");
-                        col1.Header = "Cat.";
-                        col2.DisplayMemberBinding =  new Binding("ps.p.Naam");
-                        col2.Header = "Naam";
-                        col3.DisplayMemberBinding = new Binding("ps.s.Aantal");
-                        col3.Header = "Aantal";
-                        col4.DisplayMemberBinding = new Binding("ps.p.Inkoopprijs");
-                        col4.Header = "Inkoopprijs";
-                        col5.DisplayMemberBinding = new Binding("x");
-                        col6.DisplayMemberBinding = new Binding("x");
-
+                        ChangeColumns("Stock");
                         var productList = ctx.Products.Join(
                             ctx.Stocks,
                             p => p.Id,
@@ -103,18 +143,14 @@ namespace IndividueelProject
 
                         LvOverzicht.ItemsSource = productList;
                         break;
+
                     case "Klanten":
-                        //kolom namen veranderen
-                        colID.DisplayMemberBinding = new Binding("Id");
-                        col1.DisplayMemberBinding = new Binding("Bedrijf");
-                        col1.Header = "Bedrijf";
-                        col2.DisplayMemberBinding = new Binding("Telefoonnummer");
-                        col2.Header = "Telefoonnummer";
-                        col3.DisplayMemberBinding = new Binding("AangemaaktOp");
-                        col3.Header = "Aangemaakt op";
                         LvOverzicht.ItemsSource = ctx.Klants.Select(k => k).ToList();
+                        ChangeColumns("Klanten");
                         break;
                     case "Leveranciers":
+                        LvOverzicht.ItemsSource = ctx.Leveranciers.Select(k => k).ToList();
+                        ChangeColumns("Leveranciers");
                         break;
 
                     default:
@@ -126,6 +162,22 @@ namespace IndividueelProject
         private void CbxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //ChangeWidth();
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            ChangeWidth();
+        }
+        private void ChangeWidth()
+        {
+            tabOverzicht.Width = Width / 3.5;
+            tabData.Width = Width / 3.5;
+            tabBestelling.Width = Width / 3.5;
         }
     }
 }

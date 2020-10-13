@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Background="Gray"
         FontWeight="Bold"
-        Title="Car Parts Warehouse" Height="500" Width="800" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded">
+        Title="Car Parts Warehouse" Height="500" Width="800" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -30,10 +30,15 @@
         <Image Source="Images\Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,1" />
         <Image Source="Images\Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,20" Height="80"/>
 
-        <TabControl Grid.Column="1" Grid.Row="2" Background="White">
+
+        <UniformGrid Columns="3" Margin="5,0">
+            <FrameworkElement x:Name="c1"/>
+            <!-- no need to add the other three -->
+        </UniformGrid>
+        <TabControl x:Name="TabControl" Grid.Column="1" Grid.Row="2" Background="White">
             
             <!--Batabbeheer Tab-->
-            <TabItem x:Name="TabData" Header="Databeheer" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
+            <TabItem x:Name="tabData" Header="Databeheer" Width="{Binding ElementName=c1}" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
@@ -49,7 +54,7 @@
             </TabItem>
             
             <!--Overzicht Tab-->
-            <TabItem Header="Overzicht" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B" FontSize="14">
+            <TabItem x:Name="tabOverzicht" Header="Overzicht" Width="{Binding ElementName=c1}" Background="#FFAA8D33" BorderBrush="#FFD02B2B" FontSize="14" Height="40">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
@@ -89,7 +94,7 @@
             </TabItem>
 
             <!--Bestellingen Tab-->
-            <TabItem Header="Bestelling" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
+            <TabItem x:Name="tabBestelling" Header="Bestelling" Width="{Binding ElementName=c1}" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
