@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Background="Gray"
         FontWeight="Bold"
-        Title="Car Parts Warehouse" Height="500" Width="800" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" ResizeMode="CanMinimize">
+        Title="Car Parts Warehouse" Height="500" Width="800" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -28,7 +28,7 @@
         
         <!--Header-->
         <Image Source="Images\Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,1" />
-        <Image Source="Images\Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,20" Height="80"/>
+        <Image Source="Images\Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,20" Height="80"/>
 
         <TabControl Grid.Column="1" Grid.Row="2" Background="White">
             
@@ -49,7 +49,7 @@
             </TabItem>
             
             <!--Overzicht Tab-->
-            <TabItem Header="Overzicht" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B" >
+            <TabItem Header="Overzicht" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B" FontSize="14">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
@@ -62,14 +62,29 @@
                         <RowDefinition/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
-                    <ListView Grid.Column="1" Grid.Row="1">
+                    
+                    <!--Listview van geselecteerd overzicht-->
+                    <ListView x:Name="LvOverzicht" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Product"/>
-                                <GridViewColumn Header="Aantal"/>
+                                <GridViewColumn x:Name="colID" Header="ID" Width="auto"/>
+                                <GridViewColumn x:Name="col1" Width="auto"/>
+                                <GridViewColumn x:Name="col2" Width="auto"/>
+                                <GridViewColumn x:Name="col3" Width="auto"/>
+                                <GridViewColumn x:Name="col4" Width="auto"/>
+                                <GridViewColumn x:Name="col5" Width="auto"/>
+                                <GridViewColumn x:Name="col6" Width="auto"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
+
+                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="5,20,0,0">
+                        <TextBlock Text="Overzicht van"/>
+                        <ComboBox x:Name="CbxOverzicht" SelectionChanged="CbxOverzicht_SelectionChanged"/>
+                        <TextBlock Text="Sorteren op" Margin="0,5,0,0"/>
+                        <ComboBox x:Name="CbxSort" SelectionChanged="CbxSort_SelectionChanged"/>
+
+                    </StackPanel>
                 </Grid>
             </TabItem>
 

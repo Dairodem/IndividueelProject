@@ -8,7 +8,7 @@
         Background="Gray"
         Title="Login" 
         Height="225" Width="300" 
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="warehouse_icon.png">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="Images/warehouse_icon.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>

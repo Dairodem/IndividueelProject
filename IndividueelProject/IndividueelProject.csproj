@@ -165,7 +165,6 @@
     <Resource Include="Images\Logo_FGsmall.png" />
     <Resource Include="Images\Logo_BG.png" />
     <Resource Include="BackGroundLogo.png" />
-    <Resource Include="warehouse_icon.png" />
     <Resource Include="Images\warehouse.png" />
     <Resource Include="Images\warehouse_icon.png" />
   </ItemGroup>
