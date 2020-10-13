@@ -17,5 +17,6 @@ namespace IndividueelProject
         public int Id { get; set; }
         public Nullable<int> IdBestelling { get; set; }
         public Nullable<int> IdProduct { get; set; }
+        public Nullable<int> Aantal { get; set; }
     }
 }

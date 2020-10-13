@@ -22,6 +22,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdBestelling" Type="int" />
           <Property Name="IdProduct" Type="int" />
+          <Property Name="Aantal" Type="int" />
         </EntityType>
         <EntityType Name="Categorie">
           <Key>
@@ -134,6 +135,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdBestelling" Type="Int32" />
           <Property Name="IdProduct" Type="Int32" />
+          <Property Name="Aantal" Type="Int32" />
         </EntityType>
         <EntityType Name="Categorie">
           <Key>
@@ -213,24 +215,24 @@
           <Property Name="Naam" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IdCategorie" Type="Int32" />
         </EntityType>
-        <EntityContainer Name="MagazijnEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Bestelling" EntityType="Self.Bestelling" />
-          <EntitySet Name="BestellingProduct" EntityType="Self.BestellingProduct" />
-          <EntitySet Name="Categorie" EntityType="Self.Categorie" />
-          <EntitySet Name="Klant" EntityType="Self.Klant" />
-          <EntitySet Name="Leverancier" EntityType="Self.Leverancier" />
-          <EntitySet Name="Personeelslid" EntityType="Self.Personeelslid" />
-          <EntitySet Name="Product" EntityType="Self.Product" />
-          <EntitySet Name="Stock" EntityType="Self.Stock" />
-          <EntitySet Name="Subcategorie" EntityType="Self.Subcategorie" />
+        <EntityContainer Name="MagazijnEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bestellings" EntityType="Self.Bestelling" />
+          <EntitySet Name="BestellingProducts" EntityType="Self.BestellingProduct" />
+          <EntitySet Name="Categories" EntityType="Self.Categorie" />
+          <EntitySet Name="Klants" EntityType="Self.Klant" />
+          <EntitySet Name="Leveranciers" EntityType="Self.Leverancier" />
+          <EntitySet Name="Personeelslids" EntityType="Self.Personeelslid" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Stocks" EntityType="Self.Stock" />
+          <EntitySet Name="Subcategories" EntityType="Self.Subcategorie" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MagazijnModelStoreContainer" CdmEntityContainer="MagazijnEntities">
-          <EntitySetMapping Name="Bestelling">
+        <EntityContainerMapping StorageEntityContainer="MagazijnModelStoreContainer" CdmEntityContainer="MagazijnEntities1">
+          <EntitySetMapping Name="Bestellings">
             <EntityTypeMapping TypeName="MagazijnModel.Bestelling">
               <MappingFragment StoreEntitySet="Bestelling">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -241,16 +243,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BestellingProduct">
+          <EntitySetMapping Name="BestellingProducts">
             <EntityTypeMapping TypeName="MagazijnModel.BestellingProduct">
               <MappingFragment StoreEntitySet="BestellingProduct">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdBestelling" ColumnName="IdBestelling" />
                 <ScalarProperty Name="IdProduct" ColumnName="IdProduct" />
+                <ScalarProperty Name="Aantal" ColumnName="Aantal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Categorie">
+          <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="MagazijnModel.Categorie">
               <MappingFragment StoreEntitySet="Categorie">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -258,7 +261,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Klant">
+          <EntitySetMapping Name="Klants">
             <EntityTypeMapping TypeName="MagazijnModel.Klant">
               <MappingFragment StoreEntitySet="Klant">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -275,7 +278,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Leverancier">
+          <EntitySetMapping Name="Leveranciers">
             <EntityTypeMapping TypeName="MagazijnModel.Leverancier">
               <MappingFragment StoreEntitySet="Leverancier">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -290,7 +293,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Personeelslid">
+          <EntitySetMapping Name="Personeelslids">
             <EntityTypeMapping TypeName="MagazijnModel.Personeelslid">
               <MappingFragment StoreEntitySet="Personeelslid">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -302,7 +305,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Product">
+          <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="MagazijnModel.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -316,7 +319,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Stock">
+          <EntitySetMapping Name="Stocks">
             <EntityTypeMapping TypeName="MagazijnModel.Stock">
               <MappingFragment StoreEntitySet="Stock">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -326,7 +329,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Subcategorie">
+          <EntitySetMapping Name="Subcategories">
             <EntityTypeMapping TypeName="MagazijnModel.Subcategorie">
               <MappingFragment StoreEntitySet="Subcategorie">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -349,7 +352,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

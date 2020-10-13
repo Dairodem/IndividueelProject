@@ -25,14 +25,14 @@ namespace IndividueelProject
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Bestelling> Bestelling { get; set; }
-        public virtual DbSet<BestellingProduct> BestellingProduct { get; set; }
-        public virtual DbSet<Categorie> Categorie { get; set; }
-        public virtual DbSet<Klant> Klant { get; set; }
-        public virtual DbSet<Leverancier> Leverancier { get; set; }
-        public virtual DbSet<Personeelslid> Personeelslid { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<Stock> Stock { get; set; }
-        public virtual DbSet<Subcategorie> Subcategorie { get; set; }
+        public virtual DbSet<Bestelling> Bestellings { get; set; }
+        public virtual DbSet<BestellingProduct> BestellingProducts { get; set; }
+        public virtual DbSet<Categorie> Categories { get; set; }
+        public virtual DbSet<Klant> Klants { get; set; }
+        public virtual DbSet<Leverancier> Leveranciers { get; set; }
+        public virtual DbSet<Personeelslid> Personeelslids { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<Subcategorie> Subcategories { get; set; }
     }
 }

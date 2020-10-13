@@ -20,13 +20,19 @@
             <RowDefinition/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
+        
+        <!--Menu-->
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File"/>
         </Menu>
-        <Image Source="Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,1" />
-        <Image Source="Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,20" Height="80"/>
+        
+        <!--Header-->
+        <Image Source="Images\Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,1" />
+        <Image Source="Images\Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,20" Height="80"/>
 
         <TabControl Grid.Column="1" Grid.Row="2" Background="White">
+            
+            <!--Batabbeheer Tab-->
             <TabItem x:Name="TabData" Header="Databeheer" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
@@ -40,13 +46,15 @@
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
                 </Grid>
-                
             </TabItem>
+            
+            <!--Overzicht Tab-->
             <TabItem Header="Overzicht" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B" >
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -54,9 +62,18 @@
                         <RowDefinition/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
+                    <ListView Grid.Column="1" Grid.Row="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Product"/>
+                                <GridViewColumn Header="Aantal"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
-                
             </TabItem>
+
+            <!--Bestellingen Tab-->
             <TabItem Header="Bestelling" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
@@ -70,7 +87,6 @@
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
                 </Grid>
-                
             </TabItem>
         </TabControl>
 

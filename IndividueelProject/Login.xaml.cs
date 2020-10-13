@@ -39,7 +39,7 @@ namespace IndividueelProject
             //--Controle op username en wachtwoord
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
-                Personeelslid user = ctx.Personeelslid.Where(u => u.Login == TxtUser.Text).FirstOrDefault();
+                Personeelslid user = ctx.Personeelslids.Where(u => u.Login == TxtUser.Text).FirstOrDefault();
 
                 if (user != null)
                 {

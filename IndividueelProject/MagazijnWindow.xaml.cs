@@ -33,7 +33,7 @@ namespace IndividueelProject
      * -product  toevoegen/bewerken/verwijderen
      * -klant toevoegen/bewerken/verwijderen
      * -leverancier toevoegen/bewerken/verwijderen
-     * -catergorie toevoegen/bewerken/verwijderen
+     * -categorie toevoegen/bewerken/verwijderen
      * -subcategorie toevoegen/bewerken/verwijderen
      * 
      * bestellingTab uitwerken

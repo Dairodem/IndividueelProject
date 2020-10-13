@@ -79,10 +79,20 @@
     <Compile Include="Leverancier.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MagazijnDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MagazijnDataModel.Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="MagazijnDataModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MagazijnDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MagazijnDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="MagazijnWindow.xaml.cs">
       <DependentUpon>MagazijnWindow.xaml</DependentUpon>
@@ -110,16 +120,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MagazijnDataModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MagazijnDataModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MagazijnDataModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MagazijnDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -161,26 +161,28 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Logo_FG.png" />
-    <Resource Include="Logo_FGsmall.png" />
-    <Resource Include="Logo_BG.png" />
+    <Resource Include="Images\Logo_FG.png" />
+    <Resource Include="Images\Logo_FGsmall.png" />
+    <Resource Include="Images\Logo_BG.png" />
     <Resource Include="BackGroundLogo.png" />
     <Resource Include="warehouse_icon.png" />
     <Resource Include="Images\warehouse.png" />
     <Resource Include="Images\warehouse_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="MagazijnDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MagazijnDataModel.Context.cs</LastGenOutput>
       <DependentUpon>MagazijnDataModel.edmx</DependentUpon>
+      <LastGenOutput>MagazijnDataModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="MagazijnDataModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MagazijnDataModel.edmx</DependentUpon>
       <LastGenOutput>MagazijnDataModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
