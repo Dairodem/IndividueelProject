@@ -53,7 +53,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Bedrijf" Type="nvarchar" MaxLength="50" />
-          <Property Name="Telefoonnummer" Type="int" />
+          <Property Name="Telefoonnummer" Type="nvarchar" MaxLength="20" />
           <Property Name="Emailadres" Type="nvarchar" MaxLength="50" />
           <Property Name="Straatnaam" Type="nvarchar" MaxLength="50" />
           <Property Name="Huisnummer" Type="int" />
@@ -78,8 +78,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Naam" Type="nvarchar" MaxLength="50" />
-          <Property Name="Inkoopprijs" Type="smallmoney" />
-          <Property Name="Marge" Type="smallmoney" />
+          <Property Name="Inkoopprijs" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Marge" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Eenheid" Type="nvarchar" MaxLength="20" />
           <Property Name="BTW" Type="decimal" Precision="5" Scale="2" />
           <Property Name="IdLeverancier" Type="int" />
@@ -166,7 +166,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Bedrijf" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Telefoonnummer" Type="Int32" />
+          <Property Name="Telefoonnummer" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Emailadres" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Straatnaam" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Huisnummer" Type="Int32" />
@@ -191,8 +191,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Naam" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Inkoopprijs" Type="Decimal" Precision="10" Scale="4" />
-          <Property Name="Marge" Type="Decimal" Precision="10" Scale="4" />
+          <Property Name="Inkoopprijs" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Marge" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Eenheid" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="BTW" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="IdLeverancier" Type="Int32" />
@@ -215,7 +215,7 @@
           <Property Name="Naam" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IdCategorie" Type="Int32" />
         </EntityType>
-        <EntityContainer Name="MagazijnEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="MagazijnEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bestellings" EntityType="Self.Bestelling" />
           <EntitySet Name="BestellingProducts" EntityType="Self.BestellingProduct" />
           <EntitySet Name="Categories" EntityType="Self.Categorie" />
@@ -231,7 +231,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MagazijnModelStoreContainer" CdmEntityContainer="MagazijnEntities1">
+        <EntityContainerMapping StorageEntityContainer="MagazijnModelStoreContainer" CdmEntityContainer="MagazijnEntities">
           <EntitySetMapping Name="Bestellings">
             <EntityTypeMapping TypeName="MagazijnModel.Bestelling">
               <MappingFragment StoreEntitySet="Bestelling">

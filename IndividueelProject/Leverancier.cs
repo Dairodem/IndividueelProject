@@ -16,7 +16,7 @@ namespace IndividueelProject
     {
         public int Id { get; set; }
         public string Bedrijf { get; set; }
-        public Nullable<int> Telefoonnummer { get; set; }
+        public string Telefoonnummer { get; set; }
         public string Emailadres { get; set; }
         public string Straatnaam { get; set; }
         public Nullable<int> Huisnummer { get; set; }

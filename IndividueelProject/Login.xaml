@@ -21,6 +21,8 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
+        
+        <!--Header-->
         <Image Source="Images\Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" Margin="0,0,0,10"/>
         <Image Source="Images\Logo_FGsmall.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,10" Height="64"/>
         <Grid Grid.Column="1" Grid.Row="2">
@@ -32,6 +34,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
+            <!--alle content-->
             <StackPanel Grid.Column="0">
                 <TextBlock FontWeight="Bold" Text="Gebruikernaam:" Margin="5,5" HorizontalAlignment="Right"/>
                 <TextBlock FontWeight="Bold" Text="Wachtwoord:" Margin="5,5" HorizontalAlignment="Right"/>
