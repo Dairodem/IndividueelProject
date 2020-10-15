@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,11 +53,34 @@ namespace IndividueelProject
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
-            {"Naam A>Z","NaamUp" },
+            {"Naam A>Z","naamUp" },
             {"Naam Z>A","naamDown" },
-            {"Catergorie A>Z","catUp" },
+            {"Categorie A>Z","catUp" },
             {"Categorie Z>A","catDown" },
+            {"Aantal Laag>Hoog","aantalUp" },
+            {"Aantal Hoog>Laag","aantalDown" },
+            {"Leverancier A>Z","levUp" },
+            {"Leverancier Z>A","levDown" },
         };
+        Dictionary<string, string> sortProductDict = new Dictionary<string, string>()
+        {
+            {"Id","Id" },
+            {"Naam A>Z","naamUp" },
+            {"Naam Z>A","naamDown" },
+            {"Categorie A>Z","catUp" },
+            {"Categorie Z>A","catDown" },
+            {"Prijs Laag>Hoog","aantalUp" },
+            {"Prijs Hoog>Laag","aantalDown" },
+            {"Leverancier A>Z","levUp" },
+            {"Leverancier Z>A","levDown" },
+        };
+        Dictionary<string, string> sortLeverKlantDict = new Dictionary<string, string>()
+        {
+            {"Id","Id" },
+            {"Bedrijf A>Z","bedrUp" },
+            {"Bedrijf Z>A","bedrDown" },
+        };
+
 
         public MagazijnWindow()
         {
@@ -68,8 +92,6 @@ namespace IndividueelProject
             CbxOverzicht.ItemsSource = overzichtArr;
             CbxOverzicht.SelectedIndex = 0;
             
-            CbxSort.ItemsSource = sortStockDict.Keys;
-            CbxSort.SelectedIndex = 0;
 
             tabOverzicht.Width = Width / 4;
             tabData.Width = Width / 4;
@@ -81,6 +103,7 @@ namespace IndividueelProject
             {
                 case "Stock":
                     colID.DisplayMemberBinding = new Binding("ps2.ps.s.Id");
+                    colID.Width = 30;
                     col1.DisplayMemberBinding = new Binding("ps2.Naam");
                     col1.Header = "Cat.";
                     col1.Width = 150;
@@ -101,28 +124,30 @@ namespace IndividueelProject
                     col6.Width = 2;
                     break;
                 case "Producten":
-                    colID.DisplayMemberBinding = new Binding("ps2.ps.p.Id");
-                    col1.DisplayMemberBinding = new Binding("ps2.Naam");
+                    colID.DisplayMemberBinding = new Binding("pc.p.Id");
+                    colID.Width = 30;
+                    col1.DisplayMemberBinding = new Binding("pc.Naam");
                     col1.Header = "Cat.";
                     col1.Width = 150;
-                    col2.DisplayMemberBinding = new Binding("ps2.ps.p.Naam");
+                    col2.DisplayMemberBinding = new Binding("pc.p.Naam");
                     col2.Header = "Naam";
                     col2.Width = 250;
-                    col3.DisplayMemberBinding = new Binding("ps2.ps.s.Aantal");
-                    col3.Header = "Aantal";
-                    col3.Width = 50;
-                    col4.DisplayMemberBinding = new Binding("ps2.ps.p.Eenheid");
+                    col3.DisplayMemberBinding = new Binding("pc.p.Inkoopprijs");
+                    col3.Header = "Inkoopprijs";
+                    col3.Width = 100;
+                    col4.DisplayMemberBinding = new Binding("pc.p.Eenheid");
                     col4.Header = "Eenheid";
                     col4.Width = 60;
-                    col5.DisplayMemberBinding = new Binding("ps2.ps.p.Marge");
+                    col5.DisplayMemberBinding = new Binding("pc.p.Marge");
                     col5.Header = "Marge";
                     col6.Width = 50;
-                    col6.DisplayMemberBinding = new Binding("ps2.ps.p.BTW");
+                    col6.DisplayMemberBinding = new Binding("pc.p.BTW");
                     col6.Header = "BTW";
                     col6.Width = 50;
                     break;
                 case "Klanten":
                     colID.DisplayMemberBinding = new Binding("Id");
+                    colID.Width = 30;
                     col1.DisplayMemberBinding = new Binding("Bedrijf");
                     col1.Header = "Bedrijf";
                     col1.Width = 200;
@@ -144,6 +169,7 @@ namespace IndividueelProject
                     break;
                 case "Leveranciers":
                     colID.DisplayMemberBinding = new Binding("Id");
+                    colID.Width = 30;
                     col1.DisplayMemberBinding = new Binding("Bedrijf");
                     col1.Header = "Bedrijf";
                     col1.Width = 100;
@@ -171,50 +197,106 @@ namespace IndividueelProject
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
-                var productList = ctx.Products.Join(
-                    ctx.Stocks,
-                    p => p.Id,
-                    s => s.IdProduct,
-                    (p, s) => new { p, s }).Join(
-                    ctx.Subcategories,
-                    ps => ps.p.IdSubcategorie,
-                    c => c.Id,
-                    (ps, c) => new { ps, c.Naam }).Join(
-                    ctx.Leveranciers,
-                    ps2 => ps2.ps.p.IdLeverancier,
-                    l => l.Id,
-                    (ps2,l) => new { ps2, l }).ToList();
 
                 switch (CbxOverzicht.SelectedItem.ToString())
                 {
                     case "Stock":
                         ChangeColumns("Stock");
 
-                        LvOverzicht.ItemsSource = productList;
+                        var stockList = ctx.Products.Join(
+                            ctx.Stocks,
+                            p => p.Id,
+                            s => s.IdProduct,
+                            (p, s) => new { p, s }).Join(
+                            ctx.Subcategories,
+                            ps => ps.p.IdSubcategorie,
+                            c => c.Id,
+                            (ps, c) => new { ps, c.Naam }).Join(
+                            ctx.Leveranciers,
+                            ps2 => ps2.ps.p.IdLeverancier,
+                            l => l.Id,
+                            (ps2, l) => new { ps2, l }).ToList();
+
+                        CbxSort.ItemsSource = sortStockDict.Keys;
+                        LvOverzicht.ItemsSource = stockList;
                         break;
+
                     case "Producten":
-                        
-                        LvOverzicht.ItemsSource = productList;
                         ChangeColumns("Producten");
+
+                        var productList = ctx.Products.Join(
+                            ctx.Subcategories,
+                            p => p.IdSubcategorie,
+                            c => c.Id,
+                            (p, c) => new { p, c.Naam }).Join(
+                            ctx.Leveranciers,
+                            pc => pc.p.IdLeverancier,
+                            l => l.Id,
+                            (pc, l) => new { pc, l }).ToList();
+
+                        CbxSort.ItemsSource = sortProductDict.Keys;
+                        LvOverzicht.ItemsSource = productList;
                         break;
+
                     case "Klanten":
-                        LvOverzicht.ItemsSource = ctx.Klants.Select(k => k).ToList();
+                        var klantList = ctx.Klants.Select(k => k).ToList();
+                        CbxSort.ItemsSource = sortLeverKlantDict.Keys;
+                        LvOverzicht.ItemsSource = klantList;
                         ChangeColumns("Klanten");
                         break;
+
                     case "Leveranciers":
-                        LvOverzicht.ItemsSource = ctx.Leveranciers.Select(k => k).ToList();
+                        var leverList = ctx.Leveranciers.Select(k => k).ToList();
+                        CbxSort.ItemsSource = sortLeverKlantDict.Keys;
+                        LvOverzicht.ItemsSource = leverList;
                         ChangeColumns("Leveranciers");
                         break;
 
                     default:
                         break;
                 }
+
             }
         }
 
         private void CbxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(LvOverzicht.ItemsSource);
 
+            switch (CbxSort.SelectedValue)
+            {
+                case "Id":
+                    view.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
+                    break;
+                case "naamUp":
+                    view.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Ascending));
+                    break;
+                case "naamDown":
+                    view.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Descending));
+                    break;
+                case "catUp":
+                    break;
+                case "catDown":
+                    break;
+                case "levUp":
+                    break;
+                case "levDown":
+                    break;
+                case "aantalUp":
+                    break;
+                case "aantalDown":
+                    break;
+                case "prijsUp":
+                    break;
+                case "prijsDown":
+                    break;
+                case "bedrUp":
+                    break;
+                case "bedrDown":
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
