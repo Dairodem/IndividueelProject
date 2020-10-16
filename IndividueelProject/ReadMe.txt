@@ -18,3 +18,9 @@ Woensdag 14/10
 	-geprobeert om de tabbladen gelijk te verdelen over tabcontrol (nog niet gevonden)
 	-sorteerfunctie begonnen
 	-opgezocht over sorteren
+
+Donderdag 15/10
+	-databeheer-tab opgemaakt
+	
+Vrijdag 16/10
+	-verder werken aan databeheer tab

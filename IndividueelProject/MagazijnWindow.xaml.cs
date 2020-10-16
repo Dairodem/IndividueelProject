@@ -23,7 +23,6 @@ namespace IndividueelProject
     /*-------------------------------TO DO---------------------------------
 
      * overzichtTab uitwerken
-     * -opmaak verbeteren zodat alles zichtbaar is
      * -Sorteer opties
      * -Filter opties
      * -zoeken op ...
@@ -91,11 +90,10 @@ namespace IndividueelProject
         {
             CbxOverzicht.ItemsSource = overzichtArr;
             CbxOverzicht.SelectedIndex = 0;
-            
+            ChkNew.IsChecked = true;
+            ChkCust.IsChecked = true;
 
-            tabOverzicht.Width = Width / 4;
-            tabData.Width = Width / 4;
-            tabBestelling.Width = Width / 4;
+            ChangeWidth();
         }
         private void ChangeColumns(string view)
         {
@@ -313,6 +311,121 @@ namespace IndividueelProject
             tabOverzicht.Width = Width / 3.5;
             tabData.Width = Width / 3.5;
             tabBestelling.Width = Width / 3.5;
+        }
+        private void ChkNew_Checked(object sender, RoutedEventArgs e)
+        {
+                ChkChange.IsChecked = false;
+        }
+        private void ChkChange_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkNew.IsChecked = false;
+        }
+        private void ChkCust_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkDealer.IsChecked = false;
+            ChkProd.IsChecked = false;
+            ChkEmp.IsChecked = false;
+            ChkCat.IsChecked = false;
+        }
+
+        private void ChkDealer_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkCust.IsChecked = false;
+            ChkProd.IsChecked = false;
+            ChkEmp.IsChecked = false;
+            ChkCat.IsChecked = false;
+
+            LblRemark.Visibility = Visibility.Hidden;
+            TxtRemark.Visibility = Visibility.Hidden;
+
+        }
+
+        private void ChkProd_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkCust.IsChecked = false;
+            ChkDealer.IsChecked = false;
+            ChkEmp.IsChecked = false;
+            ChkCat.IsChecked = false;
+        }
+
+        private void ChkEmp_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkCust.IsChecked = false;
+            ChkDealer.IsChecked = false;
+            ChkProd.IsChecked = false;
+            ChkCat.IsChecked = false;
+        }
+
+        private void ChkCat_Checked(object sender, RoutedEventArgs e)
+        {
+            ChkCust.IsChecked = false;
+            ChkDealer.IsChecked = false;
+            ChkProd.IsChecked = false;
+            ChkEmp.IsChecked = false;
+        }
+
+        private void ChkNew_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ChkChange.IsChecked = true;
+        }
+
+        private void ChkChange_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ChkNew.IsChecked = true;
+        }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                if (ChkCust.IsChecked == true)
+                {
+                    ctx.Klants.Add(new Klant()
+                    {
+                        Bedrijf = TxtName.Text,
+                        Straatnaam = TxtStreet.Text,
+                        Huisnummer = Convert.ToInt32(TxtNumber.Text),
+                        Bus = TxtBus.Text, 
+                        Postcode = TxtPostal.Text,
+                        Gemeente = TxtCity.Text,
+                        Emailadres = TxtEmail.Text,
+                        Telefoonnummer = TxtTel.Text,
+                        Opmerking = TxtRemark.Text,
+                        AangemaaktOp = DpDate.SelectedDate
+                    });
+                }
+
+                if (ChkDealer.IsChecked == true)
+                {
+                    ctx.Leveranciers.Add(new Leverancier()
+                    {
+                        Bedrijf = TxtName.Text,
+                        Straatnaam = TxtStreet.Text,
+                        Huisnummer = Convert.ToInt32(TxtNumber.Text),
+                        Bus = TxtBus.Text,
+                        Postcode = TxtPostal.Text,
+                        Gemeente = TxtCity.Text,
+                        Emailadres = TxtEmail.Text,
+                        Telefoonnummer = TxtTel.Text
+                    });
+                }
+
+                if (ChkProd.IsChecked == true)
+                {
+                    ctx.Products.Add(new Product()
+                    {
+                        Naam = TxtName.Text,
+                        Inkoopprijs = Convert.ToDecimal(TxtStreet.Text),
+                        Marge = Convert.ToDecimal(TxtNumber.Text),
+                        BTW = Convert.ToDecimal(TxtBus.Text),
+                        Eenheid = TxtPostal.Text,
+                        IdLeverancier = (int)CbxDealer.SelectedValue,
+                        IdSubcategorie = (int)CbxCat.SelectedValue
+
+                    });
+                }
+            }
+
         }
     }
 }
