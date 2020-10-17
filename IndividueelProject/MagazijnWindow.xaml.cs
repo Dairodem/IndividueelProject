@@ -80,6 +80,8 @@ namespace IndividueelProject
             {"Bedrijf Z>A","bedrDown" },
         };
 
+        string errorText = "";
+        bool isError = false;
 
         public MagazijnWindow()
         {
@@ -92,7 +94,6 @@ namespace IndividueelProject
             CbxOverzicht.SelectedIndex = 0;
             ChkNew.IsChecked = true;
             ChkCust.IsChecked = true;
-
             ChangeWidth();
         }
         private void ChangeColumns(string view)
@@ -191,6 +192,45 @@ namespace IndividueelProject
                     break;
             }
         }
+        private void ChangeWidth()
+        {
+            tabOverzicht.Width = Width / 3.5;
+            tabData.Width = Width / 3.5;
+            tabBestelling.Width = Width / 3.5;
+        }
+        private int ConvertToInt(string str, string messageText)
+        {
+            int number = 0;
+
+            try
+            {
+                number = Convert.ToInt32(str);
+            }
+            catch (Exception)
+            {
+                errorText += $"{messageText}\n";
+                isError = true;
+            }
+
+            return number;
+        }
+        private decimal ConvertToDecimal(string str, string messageText)
+        {
+            decimal number = 0;
+
+            try
+            {
+                number = Convert.ToDecimal(str);
+            }
+            catch (Exception)
+            {
+                errorText += $"{messageText}\n";
+                isError = true;
+            }
+
+            return number;
+        }
+
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
@@ -256,7 +296,6 @@ namespace IndividueelProject
 
             }
         }
-
         private void CbxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(LvOverzicht.ItemsSource);
@@ -296,21 +335,13 @@ namespace IndividueelProject
                     break;
             }
         }
-
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //ChangeWidth();
         }
-
         private void Window_StateChanged(object sender, EventArgs e)
         {
             ChangeWidth();
-        }
-        private void ChangeWidth()
-        {
-            tabOverzicht.Width = Width / 3.5;
-            tabData.Width = Width / 3.5;
-            tabBestelling.Width = Width / 3.5;
         }
         private void ChkNew_Checked(object sender, RoutedEventArgs e)
         {
@@ -337,15 +368,17 @@ namespace IndividueelProject
             TxtBus.Visibility = Visibility.Visible;
             LblPostal.Visibility = Visibility.Visible;
             TxtPostal.Visibility = Visibility.Visible;
-
+            LblCity.Visibility = Visibility.Visible;
+            TxtCity.Visibility = Visibility.Visible;
 
             LblRemark.Visibility = Visibility.Visible;
             TxtRemark.Visibility = Visibility.Visible;
             LblDate.Visibility = Visibility.Visible;
             DpDate.Visibility = Visibility.Visible;
+            LblEmail.Visibility = Visibility.Visible;
             TxtEmail.Visibility = Visibility.Visible;
+            LblTel.Visibility = Visibility.Visible;
             TxtTel.Visibility = Visibility.Visible;
-            TxtCity.Visibility = Visibility.Visible;
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
@@ -359,7 +392,6 @@ namespace IndividueelProject
             LblEmail.Text = "Emailadres:";
             LblTel.Text = "Telefoonnummer:";
         }
-
         private void ChkDealer_Checked(object sender, RoutedEventArgs e)
         {
             ChkCust.IsChecked = false;
@@ -377,14 +409,17 @@ namespace IndividueelProject
             TxtBus.Visibility = Visibility.Visible;
             LblPostal.Visibility = Visibility.Visible;
             TxtPostal.Visibility = Visibility.Visible;
+            LblCity.Visibility = Visibility.Visible;
+            TxtCity.Visibility = Visibility.Visible;
 
             LblRemark.Visibility = Visibility.Hidden;
             TxtRemark.Visibility = Visibility.Hidden;
             LblDate.Visibility = Visibility.Hidden;
             DpDate.Visibility = Visibility.Hidden;
+            LblEmail.Visibility = Visibility.Visible;
             TxtEmail.Visibility = Visibility.Visible;
+            LblTel.Visibility = Visibility.Visible;
             TxtTel.Visibility = Visibility.Visible;
-            TxtCity.Visibility = Visibility.Visible;
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
@@ -399,7 +434,6 @@ namespace IndividueelProject
             LblTel.Text = "Telefoonnummer:";
 
         }
-
         private void ChkProd_Checked(object sender, RoutedEventArgs e)
         {
             ChkCust.IsChecked = false;
@@ -417,6 +451,8 @@ namespace IndividueelProject
             TxtBus.Visibility = Visibility.Visible;
             LblPostal.Visibility = Visibility.Visible;
             TxtPostal.Visibility = Visibility.Visible;
+            LblEmail.Visibility = Visibility.Visible;
+            LblTel.Visibility = Visibility.Visible;
 
             LblRemark.Visibility = Visibility.Hidden;
             TxtRemark.Visibility = Visibility.Hidden;
@@ -438,7 +474,6 @@ namespace IndividueelProject
             LblEmail.Text = "Leverancier:";
             LblTel.Text = "Categorie:";
         }
-
         private void ChkEmp_Checked(object sender, RoutedEventArgs e)
         {
             ChkCust.IsChecked = false;
@@ -478,7 +513,6 @@ namespace IndividueelProject
             LblPostal.Text = "Wachtwoord bevestigen:";
             LblCity.Text = "Functie:";
         }
-
         private void ChkCat_Checked(object sender, RoutedEventArgs e)
         {
             ChkCust.IsChecked = false;
@@ -496,13 +530,15 @@ namespace IndividueelProject
             TxtBus.Visibility = Visibility.Hidden;
             LblPostal.Visibility = Visibility.Hidden;
             TxtPostal.Visibility = Visibility.Hidden;
-
+            LblEmail.Visibility = Visibility.Hidden;
+            LblTel.Visibility = Visibility.Hidden;
             LblRemark.Visibility = Visibility.Hidden;
             TxtRemark.Visibility = Visibility.Hidden;
             LblDate.Visibility = Visibility.Hidden;
             DpDate.Visibility = Visibility.Hidden;
             TxtEmail.Visibility = Visibility.Hidden;
             TxtTel.Visibility = Visibility.Hidden;
+            LblCity.Visibility = Visibility.Visible;
             TxtCity.Visibility = Visibility.Visible;
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
@@ -510,17 +546,14 @@ namespace IndividueelProject
 
             LblCity.Text = "Categorienaam:";
         }
-
         private void ChkNew_Unchecked(object sender, RoutedEventArgs e)
         {
             ChkChange.IsChecked = true;
         }
-
         private void ChkChange_Unchecked(object sender, RoutedEventArgs e)
         {
             ChkNew.IsChecked = true;
         }
-
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
@@ -531,7 +564,7 @@ namespace IndividueelProject
                     {
                         Bedrijf = TxtName.Text,
                         Straatnaam = TxtStreet.Text,
-                        Huisnummer = Convert.ToInt32(TxtNumber.Text),
+                        Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
                         Bus = TxtBus.Text, 
                         Postcode = TxtPostal.Text,
                         Gemeente = TxtCity.Text,
@@ -541,14 +574,13 @@ namespace IndividueelProject
                         AangemaaktOp = DpDate.SelectedDate
                     });
                 }
-
                 if (ChkDealer.IsChecked == true)
                 {
                     ctx.Leveranciers.Add(new Leverancier()
                     {
                         Bedrijf = TxtName.Text,
                         Straatnaam = TxtStreet.Text,
-                        Huisnummer = Convert.ToInt32(TxtNumber.Text),
+                        Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
                         Bus = TxtBus.Text,
                         Postcode = TxtPostal.Text,
                         Gemeente = TxtCity.Text,
@@ -556,15 +588,14 @@ namespace IndividueelProject
                         Telefoonnummer = TxtTel.Text
                     });
                 }
-
                 if (ChkProd.IsChecked == true)
                 {
                     ctx.Products.Add(new Product()
                     {
                         Naam = TxtName.Text,
-                        Inkoopprijs = Convert.ToDecimal(TxtStreet.Text),
-                        Marge = Convert.ToDecimal(TxtNumber.Text),
-                        BTW = Convert.ToDecimal(TxtBus.Text),
+                        Inkoopprijs = ConvertToDecimal(TxtStreet.Text,"Inkoopprijs ongeldig!"),
+                        Marge = ConvertToDecimal(TxtNumber.Text,"Marge ongeldig!"),
+                        BTW = ConvertToDecimal(TxtBus.Text, "BTW ongeldig!"),
                         Eenheid = TxtPostal.Text,
                         IdLeverancier = (int)CbxDealer.SelectedValue,
                         IdSubcategorie = (int)CbxCat.SelectedValue
@@ -588,6 +619,16 @@ namespace IndividueelProject
                         Naam = TxtCity.Text
                     });
                 }
+
+                if (!isError)
+                {
+                    ctx.SaveChanges();
+                }
+                else
+                {
+                    MessageBox.Show(errorText);
+                }
+                isError = false;
             }
 
         }

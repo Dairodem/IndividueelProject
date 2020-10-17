@@ -26,3 +26,6 @@ Vrijdag 16/10
 	-verder gewerkt aan databeheer tab
 	- textblocken veranderen van tekst en bepaalde textboxen vallen weg
 	-alles kan toegevoegd worden (klant,leverancier,product,personeel, categorie)
+
+Zaterdag 17/10
+	-Errorhandeling bij nieuwe entry
