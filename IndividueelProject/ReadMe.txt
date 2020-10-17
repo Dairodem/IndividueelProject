@@ -23,4 +23,6 @@ Donderdag 15/10
 	-databeheer-tab opgemaakt
 	
 Vrijdag 16/10
-	-verder werken aan databeheer tab
+	-verder gewerkt aan databeheer tab
+	- textblocken veranderen van tekst en bepaalde textboxen vallen weg
+	-alles kan toegevoegd worden (klant,leverancier,product,personeel, categorie)

@@ -326,6 +326,38 @@ namespace IndividueelProject
             ChkProd.IsChecked = false;
             ChkEmp.IsChecked = false;
             ChkCat.IsChecked = false;
+
+            LblName.Visibility = Visibility.Visible;
+            TxtName.Visibility = Visibility.Visible;
+            LblStreet.Visibility = Visibility.Visible;
+            TxtStreet.Visibility = Visibility.Visible;
+            LblNumber.Visibility = Visibility.Visible;
+            TxtNumber.Visibility = Visibility.Visible;
+            LblBus.Visibility = Visibility.Visible;
+            TxtBus.Visibility = Visibility.Visible;
+            LblPostal.Visibility = Visibility.Visible;
+            TxtPostal.Visibility = Visibility.Visible;
+
+
+            LblRemark.Visibility = Visibility.Visible;
+            TxtRemark.Visibility = Visibility.Visible;
+            LblDate.Visibility = Visibility.Visible;
+            DpDate.Visibility = Visibility.Visible;
+            TxtEmail.Visibility = Visibility.Visible;
+            TxtTel.Visibility = Visibility.Visible;
+            TxtCity.Visibility = Visibility.Visible;
+            CbxDealer.Visibility = Visibility.Collapsed;
+            CbxCat.Visibility = Visibility.Collapsed;
+            CbxFunction.Visibility = Visibility.Collapsed;
+
+            LblName.Text = "Naam van bedrijf:";
+            LblStreet.Text = "Straat:";
+            LblNumber.Text = "Huisnummer:";
+            LblBus.Text = "Bus:";
+            LblPostal.Text = "Postcode:";
+            LblCity.Text = "Gemeente:";
+            LblEmail.Text = "Emailadres:";
+            LblTel.Text = "Telefoonnummer:";
         }
 
         private void ChkDealer_Checked(object sender, RoutedEventArgs e)
@@ -335,8 +367,36 @@ namespace IndividueelProject
             ChkEmp.IsChecked = false;
             ChkCat.IsChecked = false;
 
+            LblName.Visibility = Visibility.Visible;
+            TxtName.Visibility = Visibility.Visible;
+            LblStreet.Visibility = Visibility.Visible;
+            TxtStreet.Visibility = Visibility.Visible;
+            LblNumber.Visibility = Visibility.Visible;
+            TxtNumber.Visibility = Visibility.Visible;
+            LblBus.Visibility = Visibility.Visible;
+            TxtBus.Visibility = Visibility.Visible;
+            LblPostal.Visibility = Visibility.Visible;
+            TxtPostal.Visibility = Visibility.Visible;
+
             LblRemark.Visibility = Visibility.Hidden;
             TxtRemark.Visibility = Visibility.Hidden;
+            LblDate.Visibility = Visibility.Hidden;
+            DpDate.Visibility = Visibility.Hidden;
+            TxtEmail.Visibility = Visibility.Visible;
+            TxtTel.Visibility = Visibility.Visible;
+            TxtCity.Visibility = Visibility.Visible;
+            CbxDealer.Visibility = Visibility.Collapsed;
+            CbxCat.Visibility = Visibility.Collapsed;
+            CbxFunction.Visibility = Visibility.Collapsed;
+
+            LblName.Text = "Naam van bedrijf:";
+            LblStreet.Text = "Straat:";
+            LblNumber.Text = "Huisnummer:";
+            LblBus.Text = "Bus:";
+            LblPostal.Text = "Postcode:";
+            LblCity.Text = "Gemeente:";
+            LblEmail.Text = "Emailadres:";
+            LblTel.Text = "Telefoonnummer:";
 
         }
 
@@ -346,6 +406,37 @@ namespace IndividueelProject
             ChkDealer.IsChecked = false;
             ChkEmp.IsChecked = false;
             ChkCat.IsChecked = false;
+
+            LblName.Visibility = Visibility.Visible;
+            TxtName.Visibility = Visibility.Visible;
+            LblStreet.Visibility = Visibility.Visible;
+            TxtStreet.Visibility = Visibility.Visible;
+            LblNumber.Visibility = Visibility.Visible;
+            TxtNumber.Visibility = Visibility.Visible;
+            LblBus.Visibility = Visibility.Visible;
+            TxtBus.Visibility = Visibility.Visible;
+            LblPostal.Visibility = Visibility.Visible;
+            TxtPostal.Visibility = Visibility.Visible;
+
+            LblRemark.Visibility = Visibility.Hidden;
+            TxtRemark.Visibility = Visibility.Hidden;
+            LblDate.Visibility = Visibility.Hidden;
+            DpDate.Visibility = Visibility.Hidden;
+            LblCity.Visibility = Visibility.Hidden;
+            TxtCity.Visibility = Visibility.Hidden;
+            TxtEmail.Visibility = Visibility.Collapsed;
+            TxtTel.Visibility = Visibility.Collapsed;
+            CbxFunction.Visibility = Visibility.Collapsed;
+            CbxDealer.Visibility = Visibility.Visible;
+            CbxCat.Visibility = Visibility.Visible;
+
+            LblName.Text = "Naam van product:";
+            LblStreet.Text = "Inkoopprijs:";
+            LblNumber.Text = "Marge:";
+            LblBus.Text = "BTW:";
+            LblPostal.Text = "Eenheid:";
+            LblEmail.Text = "Leverancier:";
+            LblTel.Text = "Categorie:";
         }
 
         private void ChkEmp_Checked(object sender, RoutedEventArgs e)
@@ -354,6 +445,38 @@ namespace IndividueelProject
             ChkDealer.IsChecked = false;
             ChkProd.IsChecked = false;
             ChkCat.IsChecked = false;
+
+            LblName.Visibility = Visibility.Visible;
+            TxtName.Visibility = Visibility.Visible;
+            LblStreet.Visibility = Visibility.Visible;
+            TxtStreet.Visibility = Visibility.Visible;
+            LblNumber.Visibility = Visibility.Visible;
+            TxtNumber.Visibility = Visibility.Visible;
+            LblBus.Visibility = Visibility.Visible;
+            TxtBus.Visibility = Visibility.Visible;
+            LblPostal.Visibility = Visibility.Visible;
+            TxtPostal.Visibility = Visibility.Visible;
+
+            LblRemark.Visibility = Visibility.Hidden;
+            TxtRemark.Visibility = Visibility.Hidden;
+            LblDate.Visibility = Visibility.Hidden;
+            DpDate.Visibility = Visibility.Hidden;
+            LblEmail.Visibility = Visibility.Hidden;
+            TxtEmail.Visibility = Visibility.Hidden;
+            LblTel.Visibility = Visibility.Hidden;
+            TxtTel.Visibility = Visibility.Hidden;
+            LblCity.Visibility = Visibility.Visible;
+            CbxFunction.Visibility = Visibility.Visible;
+            TxtCity.Visibility = Visibility.Collapsed;
+            CbxDealer.Visibility = Visibility.Collapsed;
+            CbxCat.Visibility = Visibility.Collapsed;
+
+            LblName.Text = "Voornaam:";
+            LblStreet.Text = "Achternaam:";
+            LblNumber.Text = "Login:";
+            LblBus.Text = "Wachtwoord:";
+            LblPostal.Text = "Wachtwoord bevestigen:";
+            LblCity.Text = "Functie:";
         }
 
         private void ChkCat_Checked(object sender, RoutedEventArgs e)
@@ -362,6 +485,30 @@ namespace IndividueelProject
             ChkDealer.IsChecked = false;
             ChkProd.IsChecked = false;
             ChkEmp.IsChecked = false;
+
+            LblName.Visibility = Visibility.Hidden;
+            TxtName.Visibility = Visibility.Hidden;
+            LblStreet.Visibility = Visibility.Hidden;
+            TxtStreet.Visibility = Visibility.Hidden;
+            LblNumber.Visibility = Visibility.Hidden;
+            TxtNumber.Visibility = Visibility.Hidden;
+            LblBus.Visibility = Visibility.Hidden;
+            TxtBus.Visibility = Visibility.Hidden;
+            LblPostal.Visibility = Visibility.Hidden;
+            TxtPostal.Visibility = Visibility.Hidden;
+
+            LblRemark.Visibility = Visibility.Hidden;
+            TxtRemark.Visibility = Visibility.Hidden;
+            LblDate.Visibility = Visibility.Hidden;
+            DpDate.Visibility = Visibility.Hidden;
+            TxtEmail.Visibility = Visibility.Hidden;
+            TxtTel.Visibility = Visibility.Hidden;
+            TxtCity.Visibility = Visibility.Visible;
+            CbxDealer.Visibility = Visibility.Collapsed;
+            CbxCat.Visibility = Visibility.Collapsed;
+            CbxFunction.Visibility = Visibility.Collapsed;
+
+            LblCity.Text = "Categorienaam:";
         }
 
         private void ChkNew_Unchecked(object sender, RoutedEventArgs e)
@@ -421,7 +568,24 @@ namespace IndividueelProject
                         Eenheid = TxtPostal.Text,
                         IdLeverancier = (int)CbxDealer.SelectedValue,
                         IdSubcategorie = (int)CbxCat.SelectedValue
-
+                    });
+                }
+                if (ChkEmp.IsChecked == true)
+                {
+                    ctx.Personeelslids.Add(new Personeelslid()
+                    {
+                        Voornaam = TxtName.Text,
+                        Achternaam = TxtStreet.Text,
+                        Login = TxtNumber.Text,
+                        Wachtwoord = TxtBus.Text,
+                        Afdeling = CbxFunction.SelectedItem.ToString()
+                    });
+                }
+                if (ChkCat.IsChecked == true)
+                {
+                    ctx.Subcategories.Add(new Subcategorie()
+                    {
+                        Naam = TxtCity.Text
                     });
                 }
             }
