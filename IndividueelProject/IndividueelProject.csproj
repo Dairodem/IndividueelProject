@@ -109,6 +109,9 @@
     <Compile Include="Subcategorie.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="WindowChange.xaml.cs">
+      <DependentUpon>WindowChange.xaml</DependentUpon>
+    </Compile>
     <Page Include="MagazijnWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -125,6 +128,10 @@
       <DependentUpon>Login.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowChange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -164,7 +171,7 @@
     <Resource Include="Images\Logo_FG.png" />
     <Resource Include="Images\Logo_FGsmall.png" />
     <Resource Include="Images\Logo_BG.png" />
-    <Resource Include="BackGroundLogo.png" />
+    <Resource Include="Images\BackGroundLogo.png" />
     <Resource Include="Images\warehouse.png" />
     <Resource Include="Images\warehouse_icon.png" />
   </ItemGroup>
@@ -172,6 +179,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\magnifier.png" />
     <Content Include="MagazijnDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MagazijnDataModel.edmx</DependentUpon>

@@ -38,7 +38,7 @@ namespace IndividueelProject
      * 
      * bestellingTab uitwerken
      *-list van leveranciers/klanten
-     *-list van producten uit stock / bij leverancier met aantal
+     *-list van producten uit stock met aantal / bij leverancier
      *-keuze voor quantiteit 
      *-totale prijs
      *
@@ -80,6 +80,7 @@ namespace IndividueelProject
             {"Bedrijf Z>A","bedrDown" },
         };
 
+        string selection = "";
         string errorText = "";
         bool isError = false;
 
@@ -92,8 +93,6 @@ namespace IndividueelProject
         {
             CbxOverzicht.ItemsSource = overzichtArr;
             CbxOverzicht.SelectedIndex = 0;
-            ChkNew.IsChecked = true;
-            ChkCust.IsChecked = true;
             ChangeWidth();
         }
         private void ChangeColumns(string view)
@@ -343,20 +342,8 @@ namespace IndividueelProject
         {
             ChangeWidth();
         }
-        private void ChkNew_Checked(object sender, RoutedEventArgs e)
+        private void rbCust_Checked(object sender, RoutedEventArgs e)
         {
-                ChkChange.IsChecked = false;
-        }
-        private void ChkChange_Checked(object sender, RoutedEventArgs e)
-        {
-            ChkNew.IsChecked = false;
-        }
-        private void ChkCust_Checked(object sender, RoutedEventArgs e)
-        {
-            ChkDealer.IsChecked = false;
-            ChkProd.IsChecked = false;
-            ChkEmp.IsChecked = false;
-            ChkCat.IsChecked = false;
 
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
@@ -391,13 +378,11 @@ namespace IndividueelProject
             LblCity.Text = "Gemeente:";
             LblEmail.Text = "Emailadres:";
             LblTel.Text = "Telefoonnummer:";
+
+            selection = "Klant";
         }
-        private void ChkDealer_Checked(object sender, RoutedEventArgs e)
+        private void rbDealer_Checked(object sender, RoutedEventArgs e)
         {
-            ChkCust.IsChecked = false;
-            ChkProd.IsChecked = false;
-            ChkEmp.IsChecked = false;
-            ChkCat.IsChecked = false;
 
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
@@ -433,14 +418,10 @@ namespace IndividueelProject
             LblEmail.Text = "Emailadres:";
             LblTel.Text = "Telefoonnummer:";
 
+            selection = "Leverancier";
         }
-        private void ChkProd_Checked(object sender, RoutedEventArgs e)
+        private void rbProd_Checked(object sender, RoutedEventArgs e)
         {
-            ChkCust.IsChecked = false;
-            ChkDealer.IsChecked = false;
-            ChkEmp.IsChecked = false;
-            ChkCat.IsChecked = false;
-
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
             LblStreet.Visibility = Visibility.Visible;
@@ -473,14 +454,11 @@ namespace IndividueelProject
             LblPostal.Text = "Eenheid:";
             LblEmail.Text = "Leverancier:";
             LblTel.Text = "Categorie:";
-        }
-        private void ChkEmp_Checked(object sender, RoutedEventArgs e)
-        {
-            ChkCust.IsChecked = false;
-            ChkDealer.IsChecked = false;
-            ChkProd.IsChecked = false;
-            ChkCat.IsChecked = false;
 
+            selection = "Product";
+        }
+        private void rbEmp_Checked(object sender, RoutedEventArgs e)
+        {
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
             LblStreet.Visibility = Visibility.Visible;
@@ -512,14 +490,11 @@ namespace IndividueelProject
             LblBus.Text = "Wachtwoord:";
             LblPostal.Text = "Wachtwoord bevestigen:";
             LblCity.Text = "Functie:";
-        }
-        private void ChkCat_Checked(object sender, RoutedEventArgs e)
-        {
-            ChkCust.IsChecked = false;
-            ChkDealer.IsChecked = false;
-            ChkProd.IsChecked = false;
-            ChkEmp.IsChecked = false;
 
+            selection = "Personeel";
+        }
+        private void rbCat_Checked(object sender, RoutedEventArgs e)
+        {
             LblName.Visibility = Visibility.Hidden;
             TxtName.Visibility = Visibility.Hidden;
             LblStreet.Visibility = Visibility.Hidden;
@@ -545,20 +520,14 @@ namespace IndividueelProject
             CbxFunction.Visibility = Visibility.Collapsed;
 
             LblCity.Text = "Categorienaam:";
-        }
-        private void ChkNew_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ChkChange.IsChecked = true;
-        }
-        private void ChkChange_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ChkNew.IsChecked = true;
+
+            selection = "Categorie";
         }
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
-                if (ChkCust.IsChecked == true)
+                if (rbCust.IsChecked == true)
                 {
                     ctx.Klants.Add(new Klant()
                     {
@@ -574,7 +543,7 @@ namespace IndividueelProject
                         AangemaaktOp = DpDate.SelectedDate
                     });
                 }
-                if (ChkDealer.IsChecked == true)
+                if (rbDealer.IsChecked == true)
                 {
                     ctx.Leveranciers.Add(new Leverancier()
                     {
@@ -588,7 +557,7 @@ namespace IndividueelProject
                         Telefoonnummer = TxtTel.Text
                     });
                 }
-                if (ChkProd.IsChecked == true)
+                if (rbProd.IsChecked == true)
                 {
                     ctx.Products.Add(new Product()
                     {
@@ -601,7 +570,7 @@ namespace IndividueelProject
                         IdSubcategorie = (int)CbxCat.SelectedValue
                     });
                 }
-                if (ChkEmp.IsChecked == true)
+                if (rbEmp.IsChecked == true)
                 {
                     ctx.Personeelslids.Add(new Personeelslid()
                     {
@@ -612,7 +581,7 @@ namespace IndividueelProject
                         Afdeling = CbxFunction.SelectedItem.ToString()
                     });
                 }
-                if (ChkCat.IsChecked == true)
+                if (rbCat.IsChecked == true)
                 {
                     ctx.Subcategories.Add(new Subcategorie()
                     {
@@ -631,6 +600,24 @@ namespace IndividueelProject
                 isError = false;
             }
 
+        }
+
+        private void rbChange_Checked(object sender, RoutedEventArgs e)
+        {
+            BtnAdd.Content = "Bewerken";
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            WindowChange windowChange = new WindowChange();
+            windowChange.Selector = selection;
+            windowChange.Owner = this;
+            windowChange.ShowDialog();
+        }
+
+        private void rbNew_Checked(object sender, RoutedEventArgs e)
+        {
+            BtnAdd.Content = "Toevoegen";
         }
     }
 }

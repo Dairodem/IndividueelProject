@@ -55,17 +55,24 @@
                     
                     <!--Checkboxes (nieuw of bewerk)-->
                     <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
-                        <CheckBox x:Name="ChkNew" Content="Nieuw" Margin="5" Checked="ChkNew_Checked" Unchecked="ChkNew_Unchecked"/>
-                        <CheckBox x:Name="ChkChange" Content="Bewerk" Margin="5" Checked="ChkChange_Checked" Unchecked="ChkChange_Unchecked"/>
+                        <RadioButton GroupName="group1" x:Name="rbNew" Content="Nieuw" IsChecked="True" Margin="5" Checked="rbNew_Checked"/>
+                        <RadioButton GroupName="group1" x:Name="rbChange" Margin="5" Checked="rbChange_Checked">
+                            <WrapPanel>
+                                <TextBlock Text="Bewerk "/>
+                                <Button x:Name="btnSearch" MaxHeight="40" Background="#FFDCCA95" Click="btnSearch_Click" >
+                                    <Image Source="Images/Magnifier.png" Height="14"/>
+                                </Button>
+                            </WrapPanel>
+                        </RadioButton>
                     </StackPanel>
 
                     <!--Checkboxes (wat aan te passen)-->
                     <StackPanel Grid.Column="1" Grid.Row="2" Background="#FFAA8D33" Margin="0,5,0,0">
-                        <CheckBox x:Name="ChkCust" Content="Klant" Margin="5,20,5,5" Checked="ChkCust_Checked"/>
-                        <CheckBox x:Name="ChkDealer" Content="Leverancier" Margin="5" Checked="ChkDealer_Checked"/>
-                        <CheckBox x:Name="ChkProd" Content="Product" Margin="5" Checked="ChkProd_Checked"/>
-                        <CheckBox x:Name="ChkEmp" Content="Personeel" Margin="5" Checked="ChkEmp_Checked"/>
-                        <CheckBox x:Name="ChkCat" Content="Categorie" Margin="5" Checked="ChkCat_Checked"/>
+                        <RadioButton GroupName = "group2" x:Name="rbCust" Content="Klant" Margin="5,20,5,5" IsChecked="True" Checked="rbCust_Checked"/>
+                        <RadioButton GroupName = "group2" x:Name="rbDealer" Content="Leverancier" Margin="5" Checked="rbDealer_Checked"/>
+                        <RadioButton GroupName = "group2" x:Name="rbProd" Content="Product" Margin="5" Checked="rbProd_Checked"/>
+                        <RadioButton GroupName = "group2" x:Name="rbEmp" Content="Personeel" Margin="5" Checked="rbEmp_Checked"/>
+                        <RadioButton GroupName = "group2" x:Name="rbCat" Content="Categorie" Margin="5" Checked="rbCat_Checked"/>
                     </StackPanel>
                     
                     <!--Main Grid-->
