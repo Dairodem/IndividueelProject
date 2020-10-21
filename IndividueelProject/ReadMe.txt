@@ -34,6 +34,11 @@ Maandag 19/10
 	-Checkboxes naar radiobuttons veranderd bij databeheer
 	-het bewerk-gedeelte van databeheer aangemaakt
 
+Dinsdag 20/10
+	-Bewerken van gegevens is zo goed als afgewerkt
+	-opgezocht hoe je een word document inleest
+	-Databeheer zo goed als af
+
 
 
 

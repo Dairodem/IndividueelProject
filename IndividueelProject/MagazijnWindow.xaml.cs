@@ -22,6 +22,10 @@ namespace IndividueelProject
 
     /*-------------------------------TO DO---------------------------------
 
+     * bij bewerken :-alle gegevens inladen
+     *               -extra knop bij 'product' om document in te lezen
+     *               
+     *
      * overzichtTab uitwerken
      * -Sorteer opties
      * -Filter opties
@@ -33,7 +37,6 @@ namespace IndividueelProject
      * -product  toevoegen/bewerken/verwijderen
      * -klant toevoegen/bewerken/verwijderen
      * -leverancier toevoegen/bewerken/verwijderen
-     * -categorie toevoegen/bewerken/verwijderen
      * -subcategorie toevoegen/bewerken/verwijderen
      * 
      * bestellingTab uitwerken
@@ -48,7 +51,8 @@ namespace IndividueelProject
 
     public partial class MagazijnWindow : Window
     {
-        string[] overzichtArr = new string[] { "Stock","Producten", "Klanten","Leveranciers" };
+        private int myId = 0;
+        private string[] overzichtArr = new string[] { "Stock","Producten", "Klanten","Leveranciers","Personeel" };
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
@@ -87,6 +91,9 @@ namespace IndividueelProject
         public MagazijnWindow()
         {
             InitializeComponent();
+
+            rbNew.IsChecked = true;
+            rbCust.IsChecked = true;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -228,6 +235,24 @@ namespace IndividueelProject
             }
 
             return number;
+        }
+        private void SetDataCustomer()
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                Klant klant = ctx.Klants.Where(k => k.Id == myId).FirstOrDefault();
+                TxtName.Text = klant.Bedrijf;
+                TxtStreet.Text = klant.Straatnaam;
+                TxtNumber.Text = klant.Huisnummer.ToString();
+                TxtBus.Text = klant.Bus;
+                TxtPostal.Text = klant.Postcode;
+                TxtCity.Text = klant.Gemeente;
+                TxtEmail.Text = klant.Emailadres;
+                TxtTel.Text = klant.Telefoonnummer;
+                TxtRemark.Text = klant.Opmerking;
+                DpDate.SelectedDate = klant.AangemaaktOp;
+
+            }
         }
 
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -604,7 +629,10 @@ namespace IndividueelProject
 
         private void rbChange_Checked(object sender, RoutedEventArgs e)
         {
-            BtnAdd.Content = "Bewerken";
+            if (BtnAdd != null)
+            {
+                BtnAdd.Content = "Bewerken";
+            }
         }
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
@@ -613,11 +641,18 @@ namespace IndividueelProject
             windowChange.Selector = selection;
             windowChange.Owner = this;
             windowChange.ShowDialog();
+
+            myId = windowChange.thisId;
+
+            SetDataCustomer();
         }
 
         private void rbNew_Checked(object sender, RoutedEventArgs e)
         {
-            BtnAdd.Content = "Toevoegen";
+            if (BtnAdd != null)
+            {
+                BtnAdd.Content = "Toevoegen";
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace IndividueelProject
     /// </summary>
     public partial class WindowChange : Window
     {
-
+        public int thisId = 0;
         public string Selector;
         public WindowChange()
         {
@@ -62,7 +62,7 @@ namespace IndividueelProject
                         }
                     }
                     break;
-                case " Categorie":
+                case "Categorie":
                     txtChange.Text = "Welke categorie wilt u bewerken?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
@@ -78,6 +78,45 @@ namespace IndividueelProject
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
         {
+
+            switch (Selector)
+            {
+                case "Klant":
+                    using (MagazijnEntities ctx = new MagazijnEntities())
+                    {
+                        thisId = ctx.Klants.Where(k => k.Bedrijf == (string)cbChange.SelectedValue).Select(k => k.Id).FirstOrDefault();
+                    }
+                    break;
+                case "Leverancier":
+                    using (MagazijnEntities ctx = new MagazijnEntities())
+                    {
+                        thisId = ctx.Leveranciers.Where(k => k.Bedrijf == (string)cbChange.SelectedValue).Select(k => k.Id).FirstOrDefault();
+                    }
+                    break;
+                case "Product":
+                    using (MagazijnEntities ctx = new MagazijnEntities())
+                    {
+                        thisId = ctx.Products.Where(p => p.Naam == (string)cbChange.SelectedValue).Select(p => p.Id).FirstOrDefault();
+                    }
+                    break;
+                case "Personeel":
+                    using (MagazijnEntities ctx = new MagazijnEntities())
+                    {
+                        thisId = ctx.Personeelslids.Where(p => p.Voornaam + " " + p.Achternaam == (string)cbChange.SelectedValue).Select(p => p.Id).FirstOrDefault();
+                    }
+                    break;
+                case " Categorie":
+                    using (MagazijnEntities ctx = new MagazijnEntities())
+                    {
+                        thisId = ctx.Subcategories.Where(c => c.Naam == (string)cbChange.SelectedValue).Select(c => c.Id).FirstOrDefault();
+                    }
+                    break;
+
+                default:
+                    MessageBox.Show("Geen Selector gevonden");
+                    break;
+            }
+            DialogResult = true;
 
         }
     }
