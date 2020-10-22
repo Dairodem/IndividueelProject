@@ -8,6 +8,9 @@
         Background="Gray"
         FontWeight="Bold"
         Title="Car Parts Warehouse" Height="500" Width="900" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed" CanExecute="NewCommand_CanExecute" />
+    </Window.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -287,10 +290,20 @@
                                     <ListView x:Name="LvOverzichtAankoop1" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn x:Name="col1ProductsA" Header="Product" Width="80"/>
-                                                <GridViewColumn x:Name="col2ProductsA" Header="Categorie" Width="80"/>
-                                                <GridViewColumn x:Name="col3ProductsA" Header="Prijs" Width="50"/>
-                                                <GridViewColumn x:Name="col4ProductsA" Header="Eenheid" Width="80"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding p.Naam}" Header="Product" Width="150"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding c.Naam}" Header="Cat." Width="100"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding p.Inkoopprijs}" Header="Prijs" Width="60"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding p.Eenheid}" Header="Eenheid" Width="80"/>
+                                                <GridViewColumn Header="Bestel" Width="50">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBox x:Name="quantity" Text="0" Width="20" Margin="0,0,5,0"/>
+                                                                <Button Content="+" Width="20" Click="AddToList" CommandParameter="{Binding}"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
                                             </GridView>
                                         </ListView.View>
                                     </ListView>

@@ -47,7 +47,9 @@ Woensdag 21/10
 	-opgezocht hoe je een word/pdf file maakt
 
 Donderdag 22/10
-	-verder gedaan aan opmaak va Bestellingen
+	-verder gewerkt aan opmaak va Bestellingen
+	-uitpluizen hoe commands en bindings werken
+	 heb dit nodig omdat er dynamische buttons in de listview zitten
 
 
 

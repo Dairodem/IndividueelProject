@@ -52,7 +52,7 @@ namespace IndividueelProject
     public partial class MagazijnWindow : Window
     {
         private int myId = 0;
-        private string[] overzichtArr = new string[] { "Stock","Producten", "Klanten","Leveranciers","Personeel" };
+        private string[] overzichtArr = new string[] { "Stock", "Producten", "Klanten", "Leveranciers", "Personeel" };
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
@@ -635,8 +635,8 @@ namespace IndividueelProject
                         if (toChange)
                         {
                             klant.Bedrijf = TxtName.Text;
-                            klant.Straatnaam=TxtStreet.Text ;
-                            klant.Huisnummer = ConvertToInt(TxtNumber.Text,"Incorrect Huisnummer");
+                            klant.Straatnaam = TxtStreet.Text;
+                            klant.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
                             klant.Bus = TxtBus.Text;
                             klant.Postcode = TxtPostal.Text;
                             klant.Gemeente = TxtCity.Text;
@@ -694,9 +694,9 @@ namespace IndividueelProject
                         if (toChange)
                         {
                             product.Naam = TxtName.Text;
-                            product.Inkoopprijs = ConvertToDecimal(TxtStreet.Text,"Inkoopprijs niet correct ingegeven");
+                            product.Inkoopprijs = ConvertToDecimal(TxtStreet.Text, "Inkoopprijs niet correct ingegeven");
                             product.Marge = ConvertToInt(TxtNumber.Text, "Incorrecte marge ingegeven");
-                            product.BTW = ConvertToInt(TxtBus.Text,"BTW niet juist ingegeven");
+                            product.BTW = ConvertToInt(TxtBus.Text, "BTW niet juist ingegeven");
                             product.Eenheid = TxtPostal.Text;
                             product.IdLeverancier = dealer.Id;
                             product.IdSubcategorie = (int)CbxCat.SelectedValue;
@@ -811,6 +811,25 @@ namespace IndividueelProject
         private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                Leverancier myDealer = ctx.Leveranciers.Where(d => d.Bedrijf == (string)cbAankoopBij.SelectedItem).FirstOrDefault();
+
+                LvOverzichtAankoop1.ItemsSource = ctx.Products.Where(l => l.IdLeverancier == myDealer.Id).
+                    Join(ctx.Subcategories,
+                    p => p.IdSubcategorie,
+                    c => c.Id,
+                    (p, c) => new { p, c }
+                    ).ToList();
+            }
+        }
+
+        private void AddToList(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Product product = btn.CommandParameter as Product;
+
+            MessageBox.Show($"{product.Naam} ");
         }
     }
 }
