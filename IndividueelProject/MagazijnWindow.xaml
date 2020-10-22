@@ -20,19 +20,19 @@
             <RowDefinition/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        
+
         <!--Menu-->
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File"/>
         </Menu>
-        
+
         <!--Header-->
         <Image Source="Images\Logo_BG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" Margin="0,0,0,1" />
         <Image Source="Images\Logo_FG.png" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,20" Height="80"/>
 
-        
+
         <TabControl x:Name="TabControl" Grid.Column="1" Grid.Row="2" Background="White">
-            
+
             <!--Databbeheer Tab-->
             <TabItem x:Name="tabData" Header="Databeheer" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B">
                 <Grid Background="Gray" Margin="1">
@@ -48,7 +48,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!--Checkboxes (nieuw of bewerk)-->
                     <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
                         <RadioButton GroupName="group1" x:Name="rbNew" Content="Nieuw" Margin="5" Checked="rbNew_Checked"/>
@@ -70,7 +70,7 @@
                         <RadioButton GroupName = "group2" x:Name="rbEmp" Content="Personeel" Margin="5" Checked="rbEmp_Checked"/>
                         <RadioButton GroupName = "group2" x:Name="rbCat" Content="Categorie" Margin="5" Checked="rbCat_Checked"/>
                     </StackPanel>
-                    
+
                     <!--Main Grid-->
                     <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Background="#FFAD9C69" Margin="5,0,0,0">
                         <Grid.ColumnDefinitions>
@@ -84,7 +84,7 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        
+
                         <!--Grid links-->
                         <Grid Grid.Column="1" Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -167,7 +167,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            
+
             <!--Overzicht Tab-->
             <TabItem x:Name="tabOverzicht" Header="Overzicht" Width="200" Background="#FFAA8D33" BorderBrush="#FFD02B2B" FontSize="14" Height="40">
                 <Grid Background="Gray" Margin="1">
@@ -182,7 +182,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
-                    
+
                     <!--Listview van geselecteerd overzicht-->
                     <ListView x:Name="LvOverzicht" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                         <ListView.View>
@@ -217,10 +217,142 @@
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="2"/>
                         <RowDefinition/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
+                    
+                    <TabControl Grid.Column="1" Grid.Row="1" Background="Gray" BorderBrush="White" BorderThickness="2">
+
+                        <!--Aankoop tab -->
+                        <TabItem x:Name="tabAankoop" Header="Aankoop" Width="250" BorderBrush="#FFD02B2B" Background="#FFAA8D33">
+                            <Grid Background="Gray" Margin="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="2"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="2"/>
+                                </Grid.RowDefinitions>
+                                
+                                <!--Selectie Aankoop bij-->
+                                <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
+                                    <TextBlock Text="Aankoop bij:" Margin="5,10,5,5"/>
+                                    <ComboBox x:Name="cbAankoopBij" Margin="5" Width="150" SelectionChanged="cbAankoopBij_SelectionChanged"/>
+                                </StackPanel>
+                                
+                                <!--Filters grid-->
+                                <Grid Grid.Column="1" Grid.Row="2" Margin="0,5,0,0" Background="#FFAA8D33">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="5"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="5"/>
+                                    </Grid.RowDefinitions>
+
+
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="Filters"/>
+
+                                </Grid>
+
+                                <!--Main Grid-->
+                                <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Background="#FFAD9C69" Margin="5,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="5"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="5"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <!--Producten lijst-->
+                                    <ListView x:Name="LvOverzichtAankoop1" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn x:Name="col1ProductsA" Header="Product" Width="80"/>
+                                                <GridViewColumn x:Name="col2ProductsA" Header="Categorie" Width="80"/>
+                                                <GridViewColumn x:Name="col3ProductsA" Header="Prijs" Width="50"/>
+                                                <GridViewColumn x:Name="col4ProductsA" Header="Eenheid" Width="80"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+
+                                    <!--Bestelling lijst-->
+                                    <Grid Grid.Column="3" Grid.Row="1" Background="#FFCBB77B">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="5"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="5"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="5"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Expander Grid.Column="1" Grid.Row="1" FontSize="10" FontWeight="Medium" ExpandDirection="Left">
+                                            <Expander.Header>
+                                                <BulletDecorator>
+                                                    <BulletDecorator.Bullet>
+                                                        <Image/>
+                                                    </BulletDecorator.Bullet>
+                                                    <StackPanel>
+                                                        <TextBlock  Text="Deze" HorizontalAlignment="Center"/>
+                                                        <TextBlock  Text="Bestelling:" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </BulletDecorator>
+                                            </Expander.Header>
+                                            <ListView x:Name="LvOverzichtAankoop2" Grid.Column="3" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                                <ListView.View>
+                                                    <GridView>
+                                                        <GridViewColumn x:Name="col1CartA" Header="Product" Width="auto"/>
+                                                        <GridViewColumn x:Name="col2CartA" Header="Categorie" Width="auto"/>
+                                                        <GridViewColumn x:Name="col3CartA" Header="Eenheid" Width="auto"/>
+                                                        <GridViewColumn x:Name="col4CartA" Header="Aantal" Width="auto"/>
+                                                        <GridViewColumn x:Name="col5CartA" Header="Totaal" Width="auto"/>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                        </Expander>
+
+                                        <Button Content="Bestel" Grid.Column="1" Grid.Row="2"/>
+
+                                    </Grid>
+
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                        
+                        <!--Verkoop tab-->
+                        <TabItem x:Name="tabVerkoop" Header="Verkoop" Width="250" BorderBrush="#FFD02B2B" Background="#FFAA8D33">
+                            
+                        </TabItem>
+                        
+                        <!--Orders tab-->
+                        <TabItem x:Name="tabOrders" Header="Orders" IsEnabled="False" Width="250" BorderBrush="#FFD02B2B" Background="#FFAA8D33">
+
+                        </TabItem>
+
+                    </TabControl>
                 </Grid>
             </TabItem>
         </TabControl>

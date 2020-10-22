@@ -33,11 +33,21 @@ Zaterdag 17/10
 Maandag 19/10
 	-Checkboxes naar radiobuttons veranderd bij databeheer
 	-het bewerk-gedeelte van databeheer aangemaakt
+	-gegevens worden ingeladen bij een selectie wanneer je iets wil bewerken
 
 Dinsdag 20/10
+	-switch tussen bewerken en toevoegen (veranderen van buttonContent, gegevens anders verwerken)
 	-Bewerken van gegevens is zo goed als afgewerkt
 	-opgezocht hoe je een word document inleest
 	-Databeheer zo goed als af
+
+Woensdag 21/10
+	-opgezocht hoe json in elkaar zit
+	-begonnen met de opmaak voor Bestellingen
+	-opgezocht hoe je een word/pdf file maakt
+
+Donderdag 22/10
+	-verder gedaan aan opmaak va Bestellingen
 
 
 

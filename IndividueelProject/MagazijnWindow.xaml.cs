@@ -84,9 +84,16 @@ namespace IndividueelProject
             {"Bedrijf Z>A","bedrDown" },
         };
 
+        Klant klant = new Klant();
+        Leverancier dealer = new Leverancier();
+        Product product = new Product();
+        Personeelslid person = new Personeelslid();
+        Subcategorie cat = new Subcategorie();
+
         string selection = "";
         string errorText = "";
         bool isError = false;
+        bool toChange = false;
 
         public MagazijnWindow()
         {
@@ -100,6 +107,7 @@ namespace IndividueelProject
         {
             CbxOverzicht.ItemsSource = overzichtArr;
             CbxOverzicht.SelectedIndex = 0;
+            RefreshDealerList(cbAankoopBij);
             ChangeWidth();
         }
         private void ChangeColumns(string view)
@@ -240,7 +248,8 @@ namespace IndividueelProject
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
-                Klant klant = ctx.Klants.Where(k => k.Id == myId).FirstOrDefault();
+                klant = ctx.Klants.Where(k => k.Id == myId).FirstOrDefault();
+
                 TxtName.Text = klant.Bedrijf;
                 TxtStreet.Text = klant.Straatnaam;
                 TxtNumber.Text = klant.Huisnummer.ToString();
@@ -252,6 +261,74 @@ namespace IndividueelProject
                 TxtRemark.Text = klant.Opmerking;
                 DpDate.SelectedDate = klant.AangemaaktOp;
 
+            }
+        }
+        private void SetDataDealer()
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                dealer = ctx.Leveranciers.Where(d => d.Id == myId).FirstOrDefault();
+                TxtName.Text = dealer.Bedrijf;
+                TxtStreet.Text = dealer.Straatnaam;
+                TxtNumber.Text = dealer.Huisnummer.ToString();
+                TxtBus.Text = dealer.Bus;
+                TxtPostal.Text = dealer.Postcode;
+                TxtCity.Text = dealer.Gemeente;
+                TxtEmail.Text = dealer.Emailadres;
+                TxtTel.Text = dealer.Telefoonnummer;
+
+            }
+        }
+        private void SetDataProduct()
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                product = ctx.Products.Where(p => p.Id == myId).FirstOrDefault();
+                dealer = ctx.Leveranciers.Where(d => d.Id == product.IdLeverancier).FirstOrDefault();
+                cat = ctx.Subcategories.Where(c => c.Id == product.IdSubcategorie).FirstOrDefault();
+
+                TxtName.Text = product.Naam;
+                TxtStreet.Text = product.Inkoopprijs.ToString();
+                TxtNumber.Text = product.Marge.ToString();
+                TxtBus.Text = product.BTW.ToString();
+                TxtPostal.Text = product.Eenheid;
+                CbxDealer.SelectedItem = dealer.Bedrijf;
+                CbxCat.SelectedItem = cat.Naam;
+
+            }
+        }
+        private void SetDataEmployee()
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                person = ctx.Personeelslids.Where(p => p.Id == myId).FirstOrDefault();
+
+                TxtName.Text = person.Voornaam;
+                TxtStreet.Text = person.Achternaam;
+                TxtNumber.Text = person.Login;
+                TxtBus.Text = person.Wachtwoord;
+                TxtPostal.Text = person.Wachtwoord;
+                TxtCity.Text = person.Afdeling;
+                CbxFunction.SelectedItem = person.Afdeling;
+
+            }
+        }
+        private void SetDataCategory()
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                cat = ctx.Subcategories.Where(p => p.Id == myId).FirstOrDefault();
+
+                TxtCity.Text = cat.Naam;
+
+            }
+        }
+        private void RefreshDealerList(ComboBox toComboBox)
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                toComboBox.ItemsSource = ctx.Leveranciers.Select(l => l.Bedrijf).ToList();
+                toComboBox.SelectedIndex = 0;
             }
         }
 
@@ -552,68 +629,128 @@ namespace IndividueelProject
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
-                if (rbCust.IsChecked == true)
+                switch (selection)
                 {
-                    ctx.Klants.Add(new Klant()
-                    {
-                        Bedrijf = TxtName.Text,
-                        Straatnaam = TxtStreet.Text,
-                        Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                        Bus = TxtBus.Text, 
-                        Postcode = TxtPostal.Text,
-                        Gemeente = TxtCity.Text,
-                        Emailadres = TxtEmail.Text,
-                        Telefoonnummer = TxtTel.Text,
-                        Opmerking = TxtRemark.Text,
-                        AangemaaktOp = DpDate.SelectedDate
-                    });
-                }
-                if (rbDealer.IsChecked == true)
-                {
-                    ctx.Leveranciers.Add(new Leverancier()
-                    {
-                        Bedrijf = TxtName.Text,
-                        Straatnaam = TxtStreet.Text,
-                        Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                        Bus = TxtBus.Text,
-                        Postcode = TxtPostal.Text,
-                        Gemeente = TxtCity.Text,
-                        Emailadres = TxtEmail.Text,
-                        Telefoonnummer = TxtTel.Text
-                    });
-                }
-                if (rbProd.IsChecked == true)
-                {
-                    ctx.Products.Add(new Product()
-                    {
-                        Naam = TxtName.Text,
-                        Inkoopprijs = ConvertToDecimal(TxtStreet.Text,"Inkoopprijs ongeldig!"),
-                        Marge = ConvertToDecimal(TxtNumber.Text,"Marge ongeldig!"),
-                        BTW = ConvertToDecimal(TxtBus.Text, "BTW ongeldig!"),
-                        Eenheid = TxtPostal.Text,
-                        IdLeverancier = (int)CbxDealer.SelectedValue,
-                        IdSubcategorie = (int)CbxCat.SelectedValue
-                    });
-                }
-                if (rbEmp.IsChecked == true)
-                {
-                    ctx.Personeelslids.Add(new Personeelslid()
-                    {
-                        Voornaam = TxtName.Text,
-                        Achternaam = TxtStreet.Text,
-                        Login = TxtNumber.Text,
-                        Wachtwoord = TxtBus.Text,
-                        Afdeling = CbxFunction.SelectedItem.ToString()
-                    });
-                }
-                if (rbCat.IsChecked == true)
-                {
-                    ctx.Subcategories.Add(new Subcategorie()
-                    {
-                        Naam = TxtCity.Text
-                    });
-                }
+                    case "Klant":
+                        if (toChange)
+                        {
+                            klant.Bedrijf = TxtName.Text;
+                            klant.Straatnaam=TxtStreet.Text ;
+                            klant.Huisnummer = ConvertToInt(TxtNumber.Text,"Incorrect Huisnummer");
+                            klant.Bus = TxtBus.Text;
+                            klant.Postcode = TxtPostal.Text;
+                            klant.Gemeente = TxtCity.Text;
+                            klant.Emailadres = TxtEmail.Text;
+                            klant.Telefoonnummer = TxtTel.Text;
+                            klant.Opmerking = TxtRemark.Text;
+                            klant.AangemaaktOp = DpDate.SelectedDate;
+                        }
+                        else
+                        {
+                            ctx.Klants.Add(new Klant()
+                            {
+                                Bedrijf = TxtName.Text,
+                                Straatnaam = TxtStreet.Text,
+                                Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
+                                Bus = TxtBus.Text,
+                                Postcode = TxtPostal.Text,
+                                Gemeente = TxtCity.Text,
+                                Emailadres = TxtEmail.Text,
+                                Telefoonnummer = TxtTel.Text,
+                                Opmerking = TxtRemark.Text,
+                                AangemaaktOp = DpDate.SelectedDate
+                            });
+                        }
+                        break;
+                    case "Leverancier":
+                        if (toChange)
+                        {
+                            dealer.Bedrijf = TxtName.Text;
+                            dealer.Straatnaam = TxtStreet.Text;
+                            dealer.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
+                            dealer.Bus = TxtBus.Text;
+                            dealer.Postcode = TxtPostal.Text;
+                            dealer.Gemeente = TxtCity.Text;
+                            dealer.Emailadres = TxtEmail.Text;
+                            dealer.Telefoonnummer = TxtTel.Text;
 
+                        }
+                        else
+                        {
+                            ctx.Leveranciers.Add(new Leverancier()
+                            {
+                                Bedrijf = TxtName.Text,
+                                Straatnaam = TxtStreet.Text,
+                                Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
+                                Bus = TxtBus.Text,
+                                Postcode = TxtPostal.Text,
+                                Gemeente = TxtCity.Text,
+                                Emailadres = TxtEmail.Text,
+                                Telefoonnummer = TxtTel.Text
+                            });
+                        }
+                        break;
+                    case "Product":
+                        if (toChange)
+                        {
+                            product.Naam = TxtName.Text;
+                            product.Inkoopprijs = ConvertToDecimal(TxtStreet.Text,"Inkoopprijs niet correct ingegeven");
+                            product.Marge = ConvertToInt(TxtNumber.Text, "Incorrecte marge ingegeven");
+                            product.BTW = ConvertToInt(TxtBus.Text,"BTW niet juist ingegeven");
+                            product.Eenheid = TxtPostal.Text;
+                            product.IdLeverancier = dealer.Id;
+                            product.IdSubcategorie = (int)CbxCat.SelectedValue;
+
+                        }
+                        else
+                        {
+                            ctx.Products.Add(new Product()
+                            {
+                                Naam = TxtName.Text,
+                                Inkoopprijs = ConvertToDecimal(TxtStreet.Text, "Inkoopprijs ongeldig!"),
+                                Marge = ConvertToDecimal(TxtNumber.Text, "Marge ongeldig!"),
+                                BTW = ConvertToDecimal(TxtBus.Text, "BTW ongeldig!"),
+                                Eenheid = TxtPostal.Text,
+                                IdLeverancier = (int)CbxDealer.SelectedValue,
+                                IdSubcategorie = (int)CbxCat.SelectedValue
+                            });
+                        }
+                        break;
+                    case "Personeel":
+                        if (toChange)
+                        {
+
+                        }
+                        else
+                        {
+                            ctx.Personeelslids.Add(new Personeelslid()
+                            {
+                                Voornaam = TxtName.Text,
+                                Achternaam = TxtStreet.Text,
+                                Login = TxtNumber.Text,
+                                Wachtwoord = TxtBus.Text,
+                                Afdeling = CbxFunction.SelectedItem.ToString()
+                            });
+                        }
+                        break;
+                    case "Categorie":
+                        if (toChange)
+                        {
+
+                        }
+                        else
+                        {
+                            ctx.Subcategories.Add(new Subcategorie()
+                            {
+                                Naam = TxtCity.Text
+                            });
+                        }
+                        break;
+
+                    default:
+                        MessageBox.Show("Geen Selector gevonden");
+                        break;
+                }
                 if (!isError)
                 {
                     ctx.SaveChanges();
@@ -626,15 +763,6 @@ namespace IndividueelProject
             }
 
         }
-
-        private void rbChange_Checked(object sender, RoutedEventArgs e)
-        {
-            if (BtnAdd != null)
-            {
-                BtnAdd.Content = "Bewerken";
-            }
-        }
-
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             WindowChange windowChange = new WindowChange();
@@ -644,15 +772,45 @@ namespace IndividueelProject
 
             myId = windowChange.thisId;
 
-            SetDataCustomer();
-        }
 
+            switch (selection)
+            {
+                case "Klant":
+                    SetDataCustomer();
+                    break;
+                case "Leverancier":
+                    SetDataDealer();
+                    break;
+                case "Product":
+                    SetDataProduct();
+                    break;
+                case "Personeel":
+                    SetDataEmployee();
+                    break;
+                case "Categorie":
+                    SetDataCategory();
+                    break;
+
+                default:
+                    MessageBox.Show("Geen Selector gevonden");
+                    break;
+            }
+        }
+        private void rbChange_Checked(object sender, RoutedEventArgs e)
+        {
+            BtnAdd.Content = "Bewerken";
+            toChange = true;
+        }
         private void rbNew_Checked(object sender, RoutedEventArgs e)
         {
-            if (BtnAdd != null)
-            {
-                BtnAdd.Content = "Toevoegen";
-            }
+            BtnAdd.Content = "Toevoegen";
+            toChange = false;
+
+        }
+
+        private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
