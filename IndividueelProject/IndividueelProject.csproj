@@ -88,6 +88,7 @@
     <Compile Include="Leverancier.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Line.cs" />
     <Compile Include="MagazijnDataModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,6 +107,7 @@
     <Compile Include="MagazijnWindow.xaml.cs">
       <DependentUpon>MagazijnWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Order.cs" />
     <Compile Include="Personeelslid.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
@@ -120,6 +122,9 @@
     </Compile>
     <Compile Include="WindowChange.xaml.cs">
       <DependentUpon>WindowChange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowQuantity.xaml.cs">
+      <DependentUpon>WindowQuantity.xaml</DependentUpon>
     </Compile>
     <Page Include="MagazijnWindow.xaml">
       <SubType>Designer</SubType>
@@ -138,6 +143,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowChange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowQuantity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

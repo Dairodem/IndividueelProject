@@ -89,16 +89,19 @@ namespace IndividueelProject
             {"Bedrijf Z>A","bedrDown" },
         };
 
-        Klant klant;
+        Klant klant = new Klant();
         Leverancier dealer = new Leverancier();
         Product product = new Product();
         Personeelslid person = new Personeelslid();
         Subcategorie cat = new Subcategorie();
+        Order order = new Order();
 
         string selection = "";
         string errorText = "";
         bool isError = false;
         bool toChange = false;
+        public int quantity = 0;
+        public int Linecount { get; set; }
 
         public MagazijnWindow()
         {
@@ -832,6 +835,7 @@ namespace IndividueelProject
 
             WindowChange windowChange = new WindowChange();
             windowChange.Selector = selection;
+            windowChange.toChange = true;
             windowChange.Owner = this;
             windowChange.ShowDialog();
 
@@ -863,31 +867,40 @@ namespace IndividueelProject
 
         private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            order.LineList.Clear();
 
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
                 Leverancier myDealer = ctx.Leveranciers.Where(d => d.Bedrijf == (string)cbAankoopBij.SelectedItem).FirstOrDefault();
 
-                LvOverzichtAankoop1.ItemsSource = ctx.Products.Where(l => l.IdLeverancier == myDealer.Id).
+                LvOverzichtAankoop1.ItemsSource = ctx.Products.Where(l => l.IdLeverancier == myDealer.Id).ToList();
+                    /*
                     Join(ctx.Subcategories,
                     p => p.IdSubcategorie,
                     c => c.Id,
                     (p, c) => new { p, c }
-                    ).ToList();
+                    ).ToList();*/
             }
         }
-        private void AddToList(object sender, RoutedEventArgs e)
+        private void AddToList_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Product product = btn.CommandParameter as Product;
+            Product product = (Product)btn.DataContext;
 
-            MessageBox.Show($"{product.Naam} ");
+
+
+            order.LineList.Add(new Line(product));
+            LvOverzichtAankoop2.ItemsSource = order.LineList;
+
+
+            MessageBox.Show($"{product.Naam}// {quantity}");
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             WindowChange windowDelete = new WindowChange();
             windowDelete.Selector = selection;
+            windowDelete.toChange = false;
             windowDelete.Owner = this;
             windowDelete.ShowDialog();
 
@@ -928,7 +941,11 @@ namespace IndividueelProject
                         break;
                 }
 
-                MessageBoxResult result = MessageBox.Show($"Weet u zeker dat u")
+                MessageBoxResult result = MessageBox.Show("Weet u zeker dat u dit element wilt verwijderen?", "Bevestiging",MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    ctx.SaveChanges();
+                }
             }
 
         }

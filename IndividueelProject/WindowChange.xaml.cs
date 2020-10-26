@@ -21,6 +21,7 @@ namespace IndividueelProject
     {
         public int thisId = 0;
         public string Selector;
+        public bool toChange;
         public WindowChange()
         {
             InitializeComponent();
@@ -28,32 +29,33 @@ namespace IndividueelProject
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            string str = toChange ? "bewerken" : "verwijderen";
+
             switch (Selector)
             {
                 case "Klant":
-                    txtChange.Text = "Welke klant wilt u bewerken?";
+                    txtChange.Text = $"Welke klant wilt u {str}?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         cbChange.ItemsSource = ctx.Klants.Select(x => x.Bedrijf).ToList();
                     }
                     break;
                 case "Leverancier":
-                    txtChange.Text = "Welke leverancier wilt u bewerken?";
+                    txtChange.Text = $"Welke leverancier wilt u {str}?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         cbChange.ItemsSource = ctx.Leveranciers.Select(x => x.Bedrijf).ToList();
                     }
                     break;
                 case "Product":
-                    txtChange.Text = "Welk product wilt u bewerken?";
+                    txtChange.Text = $"Welk product wilt u {str}?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         cbChange.ItemsSource = ctx.Products.Select(x => x.Naam).ToList();
                     }
                     break;
                 case "Personeel":
-                    txtChange.Text = "Welk personeelslid wilt u bewerken?";
+                    txtChange.Text = $"Welk personeelslid wilt u {str}?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         var leden = ctx.Personeelslids.Select(x => new {x.Id, Naam = x.Voornaam + " " + x.Achternaam }).ToList();
@@ -64,7 +66,7 @@ namespace IndividueelProject
                     }
                     break;
                 case "Categorie":
-                    txtChange.Text = "Welke categorie wilt u bewerken?";
+                    txtChange.Text = $"Welke categorie wilt u {str}?";
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         cbChange.ItemsSource = ctx.Subcategories.Select(x => x.Naam).ToList();

@@ -298,16 +298,14 @@
                                     <ListView x:Name="LvOverzichtAankoop1" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn DisplayMemberBinding="{Binding p.Naam}" Header="Product" Width="150"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding c.Naam}" Header="Cat." Width="100"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding p.Inkoopprijs}" Header="Prijs" Width="60"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding p.Eenheid}" Header="Eenheid" Width="80"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Naam}" Header="Product" Width="150"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Inkoopprijs}" Header="Prijs" Width="60"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding Eenheid}" Header="Eenheid" Width="80"/>
                                                 <GridViewColumn Header="Bestel" Width="50">
                                                     <GridViewColumn.CellTemplate>
-                                                        <DataTemplate>
+                                                        <DataTemplate DataType="x:Type loc:Product">
                                                             <StackPanel Orientation="Horizontal">
-                                                                <TextBox x:Name="quantity" Text="0" Width="20" Margin="0,0,5,0"/>
-                                                                <Button Content="+" Width="20" Click="AddToList" CommandParameter="{Binding}"/>
+                                                                <Button x:Name="btnAddToList" Content="+" Width="20" Click="AddToList_Click"/>
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
@@ -342,14 +340,13 @@
                                                     </StackPanel>
                                                 </BulletDecorator>
                                             </Expander.Header>
-                                            <ListView x:Name="LvOverzichtAankoop2" Grid.Column="3" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                            <ListView x:Name="LvOverzichtAankoop2" ItemsSource="{Binding order.LineList}" Grid.Column="3" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium" FontSize="12">
                                                 <ListView.View>
                                                     <GridView>
-                                                        <GridViewColumn x:Name="col1CartA" Header="Product" Width="auto"/>
-                                                        <GridViewColumn x:Name="col2CartA" Header="Categorie" Width="auto"/>
-                                                        <GridViewColumn x:Name="col3CartA" Header="Eenheid" Width="auto"/>
-                                                        <GridViewColumn x:Name="col4CartA" Header="Aantal" Width="auto"/>
-                                                        <GridViewColumn x:Name="col5CartA" Header="Totaal" Width="auto"/>
+                                                        <GridViewColumn x:Name="col1CartA" DisplayMemberBinding="{Binding Product.Naam}" Header="Product" Width="auto"/>
+                                                        <GridViewColumn x:Name="col2CartA" DisplayMemberBinding="{Binding Quantity}" Header="Aantal" Width="auto"/>
+                                                        <GridViewColumn x:Name="col3CartA" DisplayMemberBinding="{Binding Product.Inkoopprijs}" Header="Prijs" Width="auto"/>
+                                                        <GridViewColumn x:Name="col4CartA" DisplayMemberBinding="{Binding Total}" Header="Totaal" Width="auto"/>
                                                     </GridView>
                                                 </ListView.View>
                                             </ListView>
