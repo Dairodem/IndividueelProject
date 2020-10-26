@@ -51,6 +51,15 @@ Donderdag 22/10
 	-uitpluizen hoe commands en bindings werken
 	 heb dit nodig omdat er dynamische buttons in de listview zitten
 
+Vrijdag 23/10
+	-bewerken werkte niet, dit opgelost, blijkbaar moet het object nogmaals toegewezen worden aan het database-object bij nieuwe 'using' 
+	-nogmaals geprobeerd om de buttons te binden aan het product
+	-verder info hierover opgezocht
+Maandag 26/10
+	-opgezocht hoe je een pdf opmaakt
+	-
+
+
 
 
 

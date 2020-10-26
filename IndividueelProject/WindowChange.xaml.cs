@@ -28,6 +28,7 @@ namespace IndividueelProject
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             switch (Selector)
             {
                 case "Klant":
@@ -71,7 +72,7 @@ namespace IndividueelProject
                     break;
 
                 default:
-                    MessageBox.Show("Geen Selector gevonden");
+                    MessageBox.Show($"Geen Selector gevonden / {Selector}");
                     break;
             }
         }
@@ -105,7 +106,7 @@ namespace IndividueelProject
                         thisId = ctx.Personeelslids.Where(p => p.Voornaam + " " + p.Achternaam == (string)cbChange.SelectedValue).Select(p => p.Id).FirstOrDefault();
                     }
                     break;
-                case " Categorie":
+                case "Categorie":
                     using (MagazijnEntities ctx = new MagazijnEntities())
                     {
                         thisId = ctx.Subcategories.Where(c => c.Naam == (string)cbChange.SelectedValue).Select(c => c.Id).FirstOrDefault();
@@ -113,7 +114,7 @@ namespace IndividueelProject
                     break;
 
                 default:
-                    MessageBox.Show("Geen Selector gevonden");
+                    MessageBox.Show($"Geen Selector gevonden met naam {Selector}");
                     break;
             }
             DialogResult = true;

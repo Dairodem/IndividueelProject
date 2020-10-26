@@ -8,9 +8,7 @@
         Background="Gray"
         FontWeight="Bold"
         Title="Car Parts Warehouse" Height="500" Width="900" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
-    <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed" CanExecute="NewCommand_CanExecute" />
-    </Window.CommandBindings>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -48,7 +46,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="5"/>
                     </Grid.RowDefinitions>
 
@@ -74,8 +73,17 @@
                         <RadioButton GroupName = "group2" x:Name="rbCat" Content="Categorie" Margin="5" Checked="rbCat_Checked"/>
                     </StackPanel>
 
+                    <!--Verwijder knop-->
+                    <StackPanel Grid.Column="1" Grid.Row="3" Background="#FFAA8D33" VerticalAlignment="Bottom">
+                        <Button x:Name="btnDelete" FontSize="10" FontWeight="Medium" Margin="5" Click="btnDelete_Click">
+                            Verwijderen...
+                        </Button>
+
+                    </StackPanel>
+
+
                     <!--Main Grid-->
-                    <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Background="#FFAD9C69" Margin="5,0,0,0">
+                    <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="#FFAD9C69" Margin="5,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>

@@ -22,8 +22,13 @@ namespace IndividueelProject
 
     /*-------------------------------TO DO---------------------------------
 
-     * bij bewerken :-alle gegevens inladen
+     * 
+     * 
+     * 
+     * 
+     * bij bewerken :-verwijderen van entries
      *               -extra knop bij 'product' om document in te lezen
+     *               
      *               
      *
      * overzichtTab uitwerken
@@ -84,7 +89,7 @@ namespace IndividueelProject
             {"Bedrijf Z>A","bedrDown" },
         };
 
-        Klant klant = new Klant();
+        Klant klant;
         Leverancier dealer = new Leverancier();
         Product product = new Product();
         Personeelslid person = new Personeelslid();
@@ -331,6 +336,19 @@ namespace IndividueelProject
                 toComboBox.SelectedIndex = 0;
             }
         }
+        private void ClearAllText()
+        {
+            TxtName.Text = "";
+            TxtStreet.Text = "";
+            TxtNumber.Text = "";
+            TxtBus.Text = "";
+            TxtPostal.Text = "";
+            TxtCity.Text = "";
+            TxtEmail.Text = "";
+            TxtTel.Text = "";
+            TxtRemark.Text = "";
+            DpDate.SelectedDate = DateTime.Now;
+        }
 
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -446,6 +464,7 @@ namespace IndividueelProject
         }
         private void rbCust_Checked(object sender, RoutedEventArgs e)
         {
+            ClearAllText();
 
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
@@ -485,6 +504,7 @@ namespace IndividueelProject
         }
         private void rbDealer_Checked(object sender, RoutedEventArgs e)
         {
+            ClearAllText();
 
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
@@ -524,6 +544,8 @@ namespace IndividueelProject
         }
         private void rbProd_Checked(object sender, RoutedEventArgs e)
         {
+            ClearAllText();
+
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
             LblStreet.Visibility = Visibility.Visible;
@@ -561,6 +583,8 @@ namespace IndividueelProject
         }
         private void rbEmp_Checked(object sender, RoutedEventArgs e)
         {
+            ClearAllText();
+
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
             LblStreet.Visibility = Visibility.Visible;
@@ -597,6 +621,8 @@ namespace IndividueelProject
         }
         private void rbCat_Checked(object sender, RoutedEventArgs e)
         {
+            ClearAllText();
+
             LblName.Visibility = Visibility.Hidden;
             TxtName.Visibility = Visibility.Hidden;
             LblStreet.Visibility = Visibility.Hidden;
@@ -632,8 +658,11 @@ namespace IndividueelProject
                 switch (selection)
                 {
                     case "Klant":
+                        //Bewerken of nieuwe klant
                         if (toChange)
                         {
+                            klant = ctx.Klants.Where(k => k.Id == myId).FirstOrDefault();
+
                             klant.Bedrijf = TxtName.Text;
                             klant.Straatnaam = TxtStreet.Text;
                             klant.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
@@ -644,6 +673,7 @@ namespace IndividueelProject
                             klant.Telefoonnummer = TxtTel.Text;
                             klant.Opmerking = TxtRemark.Text;
                             klant.AangemaaktOp = DpDate.SelectedDate;
+
                         }
                         else
                         {
@@ -662,9 +692,13 @@ namespace IndividueelProject
                             });
                         }
                         break;
+
                     case "Leverancier":
+                        //Bewerken of nieuwe leverancier
                         if (toChange)
                         {
+                            dealer = ctx.Leveranciers.Where(k => k.Id == myId).FirstOrDefault();
+
                             dealer.Bedrijf = TxtName.Text;
                             dealer.Straatnaam = TxtStreet.Text;
                             dealer.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
@@ -690,9 +724,13 @@ namespace IndividueelProject
                             });
                         }
                         break;
+
                     case "Product":
+                        //Bewerken of nieuwe product
                         if (toChange)
                         {
+                            product = ctx.Products.Where(k => k.Id == myId).FirstOrDefault();
+
                             product.Naam = TxtName.Text;
                             product.Inkoopprijs = ConvertToDecimal(TxtStreet.Text, "Inkoopprijs niet correct ingegeven");
                             product.Marge = ConvertToInt(TxtNumber.Text, "Incorrecte marge ingegeven");
@@ -716,9 +754,17 @@ namespace IndividueelProject
                             });
                         }
                         break;
+
                     case "Personeel":
+                        //Bewerken of nieuwe personeelslid
                         if (toChange)
                         {
+                            person = ctx.Personeelslids.Where(k => k.Id == myId).FirstOrDefault();
+                            person.Voornaam = TxtName.Text;
+                            person.Achternaam = TxtStreet.Text;
+                            person.Login = TxtNumber.Text;
+                            person.Wachtwoord = TxtBus.Text;
+                            person.Afdeling = CbxFunction.SelectedItem.ToString();
 
                         }
                         else
@@ -733,10 +779,13 @@ namespace IndividueelProject
                             });
                         }
                         break;
+
                     case "Categorie":
+                        //Bewerken of nieuwe categorie
                         if (toChange)
                         {
-
+                            cat = ctx.Subcategories.Where(k => k.Id == myId).FirstOrDefault();
+                            cat.Naam = TxtCity.Text;
                         }
                         else
                         {
@@ -751,27 +800,42 @@ namespace IndividueelProject
                         MessageBox.Show("Geen Selector gevonden");
                         break;
                 }
+
                 if (!isError)
                 {
                     ctx.SaveChanges();
+                    MessageBox.Show("// Data opgeslagen //");
                 }
                 else
                 {
                     MessageBox.Show(errorText);
                 }
+
                 isError = false;
             }
 
         }
+        private void rbChange_Checked(object sender, RoutedEventArgs e)
+        {
+            BtnAdd.Content = "Bewerken";
+            toChange = true;
+        }
+        private void rbNew_Checked(object sender, RoutedEventArgs e)
+        {
+            BtnAdd.Content = "Toevoegen";
+            toChange = false;
+
+        }
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            rbChange.IsChecked = true;
+
             WindowChange windowChange = new WindowChange();
             windowChange.Selector = selection;
             windowChange.Owner = this;
             windowChange.ShowDialog();
 
             myId = windowChange.thisId;
-
 
             switch (selection)
             {
@@ -792,20 +856,9 @@ namespace IndividueelProject
                     break;
 
                 default:
-                    MessageBox.Show("Geen Selector gevonden");
+                    MessageBox.Show($"Geen Selector gevonden / {selection}");
                     break;
             }
-        }
-        private void rbChange_Checked(object sender, RoutedEventArgs e)
-        {
-            BtnAdd.Content = "Bewerken";
-            toChange = true;
-        }
-        private void rbNew_Checked(object sender, RoutedEventArgs e)
-        {
-            BtnAdd.Content = "Toevoegen";
-            toChange = false;
-
         }
 
         private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -823,13 +876,61 @@ namespace IndividueelProject
                     ).ToList();
             }
         }
-
         private void AddToList(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
             Product product = btn.CommandParameter as Product;
 
             MessageBox.Show($"{product.Naam} ");
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            WindowChange windowDelete = new WindowChange();
+            windowDelete.Selector = selection;
+            windowDelete.Owner = this;
+            windowDelete.ShowDialog();
+
+            myId = windowDelete.thisId;
+
+
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                switch (selection)
+                {
+                    case "Klant":
+                        klant = ctx.Klants.Where(x => x.Id == myId).FirstOrDefault();
+                        ctx.Klants.Remove(klant);
+                        break;
+
+                    case "Leverancier":
+                        dealer = ctx.Leveranciers.Where(x => x.Id == myId).FirstOrDefault();
+                        ctx.Leveranciers.Remove(dealer);
+                        break;
+
+                    case "Product":
+                        product = ctx.Products.Where(x => x.Id == myId).FirstOrDefault();
+                        ctx.Products.Remove(product);
+                        break;
+
+                    case "Personeel":
+                        person = ctx.Personeelslids.Where(x => x.Id == myId).FirstOrDefault();
+                        ctx.Personeelslids.Remove(person);
+                        break;
+
+                    case "Categorie":
+                        cat = ctx.Subcategories.Where(x => x.Id == myId).FirstOrDefault();
+                        ctx.Subcategories.Remove(cat);
+                        break;
+
+                    default:
+                        MessageBox.Show($"Geen Selector gevonden met naam {selection}");
+                        break;
+                }
+
+                MessageBoxResult result = MessageBox.Show($"Weet u zeker dat u")
+            }
+
         }
     }
 }
