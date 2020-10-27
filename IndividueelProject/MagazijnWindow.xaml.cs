@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +27,7 @@ namespace IndividueelProject
      * 
      * 
      * 
-     * bij bewerken :-verwijderen van entries
+     * bij bewerken :
      *               -extra knop bij 'product' om document in te lezen
      *               
      *               
@@ -37,17 +38,8 @@ namespace IndividueelProject
      * -zoeken op ...
      * 
      * 
-     * databeheerTab uitwerken (voor admin)
-     * -personeel toevoegen/bewerken/verwijderen
-     * -product  toevoegen/bewerken/verwijderen
-     * -klant toevoegen/bewerken/verwijderen
-     * -leverancier toevoegen/bewerken/verwijderen
-     * -subcategorie toevoegen/bewerken/verwijderen
-     * 
      * bestellingTab uitwerken
      *-list van leveranciers/klanten
-     *-list van producten uit stock met aantal / bij leverancier
-     *-keuze voor quantiteit 
      *-totale prijs
      *
      * 
@@ -114,6 +106,7 @@ namespace IndividueelProject
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CbxOverzicht.ItemsSource = overzichtArr;
+            LvOverzichtAankoop2.ItemsSource = order.LineList;
             CbxOverzicht.SelectedIndex = 0;
             RefreshDealerList(cbAankoopBij);
             ChangeWidth();
@@ -833,10 +826,12 @@ namespace IndividueelProject
         {
             rbChange.IsChecked = true;
 
-            WindowChange windowChange = new WindowChange();
-            windowChange.Selector = selection;
-            windowChange.toChange = true;
-            windowChange.Owner = this;
+            WindowChange windowChange = new WindowChange
+            {
+                Selector = selection,
+                toChange = true,
+                Owner = this
+            };
             windowChange.ShowDialog();
 
             myId = windowChange.thisId;
@@ -884,16 +879,18 @@ namespace IndividueelProject
         }
         private void AddToList_Click(object sender, RoutedEventArgs e)
         {
+            WindowQuantity windowQuantity = new WindowQuantity
+            {
+                Owner = this
+            };
+            windowQuantity.ShowDialog();
+
             Button btn = sender as Button;
             Product product = (Product)btn.DataContext;
+            order.LineList.Add(new Line(product, windowQuantity.Quantity));
 
-
-
-            order.LineList.Add(new Line(product));
+            LvOverzichtAankoop2.ItemsSource = null;
             LvOverzichtAankoop2.ItemsSource = order.LineList;
-
-
-            MessageBox.Show($"{product.Naam}// {quantity}");
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -947,6 +944,22 @@ namespace IndividueelProject
                     ctx.SaveChanges();
                 }
             }
+
+        }
+        private void btnDeleteLine_Click(object sender, RoutedEventArgs e)
+        {
+
+            Button btn = sender as Button;
+            Line line = (Line)btn.DataContext;
+
+            order.LineList.Remove(line);
+
+            LvOverzichtAankoop2.ItemsSource = null;
+            LvOverzichtAankoop2.ItemsSource = order.LineList;
+        }
+
+        private void btnMakeOrder_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

@@ -57,7 +57,14 @@ Vrijdag 23/10
 	-verder info hierover opgezocht
 Maandag 26/10
 	-opgezocht hoe je een pdf opmaakt
-	-
+	-verwijderen van data uit DB nu ook mogelijk
+	-maken van een bestelling bij de leverancier, moeite met bindings; om de waarde van textbox uit listview te halen
+
+Dinsdag 27/10
+	-bestelling bij leverancier; pop-up gemaakt voor aantal.
+	-klasses order en line aangemaakt om gemakkelijk een bestelling bij te houden
+	-verwijderen van een Lijn is nu mogelijk
+
 
 
 

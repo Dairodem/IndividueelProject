@@ -325,6 +325,7 @@
                                             <RowDefinition Height="5"/>
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
                                             <RowDefinition Height="5"/>
                                         </Grid.RowDefinitions>
 
@@ -340,19 +341,41 @@
                                                     </StackPanel>
                                                 </BulletDecorator>
                                             </Expander.Header>
-                                            <ListView x:Name="LvOverzichtAankoop2" ItemsSource="{Binding order.LineList}" Grid.Column="3" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium" FontSize="12">
-                                                <ListView.View>
-                                                    <GridView>
-                                                        <GridViewColumn x:Name="col1CartA" DisplayMemberBinding="{Binding Product.Naam}" Header="Product" Width="auto"/>
-                                                        <GridViewColumn x:Name="col2CartA" DisplayMemberBinding="{Binding Quantity}" Header="Aantal" Width="auto"/>
-                                                        <GridViewColumn x:Name="col3CartA" DisplayMemberBinding="{Binding Product.Inkoopprijs}" Header="Prijs" Width="auto"/>
-                                                        <GridViewColumn x:Name="col4CartA" DisplayMemberBinding="{Binding Total}" Header="Totaal" Width="auto"/>
-                                                    </GridView>
-                                                </ListView.View>
-                                            </ListView>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="auto"/>
+                                                </Grid.RowDefinitions>
+                                                
+                                                <ListView x:Name="LvOverzichtAankoop2" ItemsSource="{Binding order.LineList}" Grid.Column="0" Grid.Row="0" Background="#FFD3C69E" FontWeight="Medium" FontSize="12">
+                                                    <ListView.View>
+                                                        <GridView>
+                                                            <GridViewColumn x:Name="col1CartA" DisplayMemberBinding="{Binding Product.Naam}" Header="Product" Width="auto"/>
+                                                            <GridViewColumn x:Name="col2CartA" DisplayMemberBinding="{Binding Quantity}" Header="Aantal" Width="auto"/>
+                                                            <GridViewColumn x:Name="col3CartA" DisplayMemberBinding="{Binding Product.Inkoopprijs}" Header="Prijs" Width="auto"/>
+                                                            <GridViewColumn x:Name="col4CartA" DisplayMemberBinding="{Binding Total}" Header="Totaal" Width="auto" />
+                                                            <GridViewColumn x:Name="col5CartA" Width="auto">
+                                                                <GridViewColumn.CellTemplate>
+                                                                    <DataTemplate DataType="x:Type loc:Line">
+                                                                        <Button x:Name="btnDeleteLine" Click="btnDeleteLine_Click" MaxHeight="20" Width="20" Background="Transparent">
+                                                                            <Image Source="Images/Delete_Icon.png" Height="14"/>
+                                                                        </Button>
+                                                                    </DataTemplate>
+
+                                                                </GridViewColumn.CellTemplate>
+                                                            </GridViewColumn>
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                                <TextBlock Grid.Column="0" Grid.Row="1" Text="Totaal:"/>
+                                                <TextBlock Grid.Column="0" Grid.Row="1" Text="745,51" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                            </Grid>
                                         </Expander>
 
-                                        <Button Content="Bestel" Grid.Column="1" Grid.Row="2"/>
+                                        <Button x:Name="btnMakeOrder" Content="Bestel" Grid.Column="1" Grid.Row="3" Click="btnMakeOrder_Click"/>
 
                                     </Grid>
 

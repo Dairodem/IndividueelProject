@@ -14,5 +14,17 @@ namespace IndividueelProject
         {
             LineList = new List<Line>();
         }
+        public decimal GetTotal()
+        {
+            decimal total = 0;
+
+            foreach (Line line in LineList)
+            {
+                total += line.Total;
+            }
+
+            return total;
+
+        }
     }
 }

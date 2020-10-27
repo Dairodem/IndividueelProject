@@ -198,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\magnifier.png" />
+    <Resource Include="Images\Delete_icon.png" />
     <Content Include="MagazijnDataModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MagazijnDataModel.edmx</DependentUpon>
