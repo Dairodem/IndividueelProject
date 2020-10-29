@@ -34,6 +34,7 @@ namespace IndividueelProject
             //-- Easy log in (Debugging)
             TxtUser.Text = "admin";
             TxtPass.Text = "admin";
+            BtnLogin_Click(sender, e);
         }
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {

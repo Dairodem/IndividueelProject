@@ -21,6 +21,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
+using Microsoft.Win32;
+using System.IO;
 
 namespace IndividueelProject
 {
@@ -33,12 +35,16 @@ namespace IndividueelProject
 
      * 
      * 
+     * usergegevens tonen
      * 
-     * 
-     * bij bewerken :
-     *               -extra knop bij 'product' om document in te lezen
+     * bij bewerken :- kijken of alle data up to date is
      *               
-     *               
+     *  
+     * bestellingTab uitwerken
+     *  -Stock aanpassen wanneer bestelling is gelukt
+     *  -Orders tonen in lijst in & out apart (met keuze om meerdere te printen als dit nog niet is gebeurd)    
+     *  
+     *  
      * CreatePDF verder afwerken
      *
      * overzichtTab uitwerken
@@ -46,11 +52,10 @@ namespace IndividueelProject
      * -Filter opties
      * -zoeken op ...
      * 
-     * 
-     * bestellingTab uitwerken
-     *  -Stock aanpassen wanneer bestelling is gelukt
-     *  -Orders tonen in lijst
+     * gehele opmaak
      *
+     * aan- en af-melden
+     * menu aanvullen
      * 
      */
 
@@ -116,7 +121,7 @@ namespace IndividueelProject
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
                 Bestelling order = ctx.Bestellings.Where(x => x.Id == 2).FirstOrDefault();
-                CreatePDF(order);
+                //CreatePDF(order);
             }
 
             rbNew.IsChecked = true;
@@ -125,6 +130,7 @@ namespace IndividueelProject
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            SetUserAccessFor(User);
 
             CbxOverzicht.ItemsSource = overzichtArr;
             CbxOverzicht.SelectedIndex = 0;
@@ -151,14 +157,29 @@ namespace IndividueelProject
             {
 
                 case "Magazijn":
+                    //databeheer
+                    rbCust.Visibility = Visibility.Collapsed;
+                    rbProd.Visibility = Visibility.Collapsed;
+                    rbEmp.Visibility = Visibility.Collapsed;
+
+                    //bestelllingen
+                    tabVerkoop.Visibility = Visibility.Collapsed;
+
+                    //overzicht 
+                    overzichtArr = new string[] { "Stock", "Producten", "Leveranciers"};
                     break;
 
                 case "Verkoop":
+                    //databeheer
+                    rbDealer.Visibility = Visibility.Collapsed;
+                    rbEmp.Visibility = Visibility.Collapsed;
+
+                    //bestellingen
+                    tabAankoop.Visibility = Visibility.Collapsed;
+                    overzichtArr = new string[] { "Stock", "Producten", "Klanten"};
                     break;
 
                 case "Admin":
-                    break;
-
                 case "Gamer":
                 default:
                     break;
@@ -702,6 +723,7 @@ namespace IndividueelProject
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
+            btnAddTemplate.Visibility = Visibility.Collapsed;
 
             LblName.Text = "Naam van bedrijf:";
             LblStreet.Text = "Straat:";
@@ -742,6 +764,7 @@ namespace IndividueelProject
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
+            btnAddTemplate.Visibility = Visibility.Collapsed;
 
             LblName.Text = "Naam van bedrijf:";
             LblStreet.Text = "Straat:";
@@ -772,15 +795,16 @@ namespace IndividueelProject
             TxtPostal.Visibility = Visibility.Visible;
             LblEmail.Visibility = Visibility.Visible;
             LblTel.Visibility = Visibility.Visible;
+            btnAddTemplate.Visibility = Visibility.Visible;
 
             LblRemark.Visibility = Visibility.Hidden;
             TxtRemark.Visibility = Visibility.Hidden;
             LblDate.Visibility = Visibility.Hidden;
-            DpDate.Visibility = Visibility.Hidden;
             LblCity.Visibility = Visibility.Hidden;
             TxtCity.Visibility = Visibility.Hidden;
             TxtEmail.Visibility = Visibility.Collapsed;
             TxtTel.Visibility = Visibility.Collapsed;
+            DpDate.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
             CbxDealer.Visibility = Visibility.Visible;
             CbxCat.Visibility = Visibility.Visible;
@@ -823,6 +847,7 @@ namespace IndividueelProject
             TxtCity.Visibility = Visibility.Collapsed;
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
+            btnAddTemplate.Visibility = Visibility.Collapsed;
 
             LblName.Text = "Voornaam:";
             LblStreet.Text = "Achternaam:";
@@ -860,6 +885,7 @@ namespace IndividueelProject
             CbxDealer.Visibility = Visibility.Collapsed;
             CbxCat.Visibility = Visibility.Collapsed;
             CbxFunction.Visibility = Visibility.Collapsed;
+            btnAddTemplate.Visibility = Visibility.Collapsed;
 
             LblCity.Text = "Categorienaam:";
 
@@ -1277,6 +1303,43 @@ namespace IndividueelProject
             }
 
 
+        }
+
+        private void btnAddTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Text files (*.txt)|*.txt";
+
+            string name = "";
+            decimal price = 0;
+            if (openFile.ShowDialog() == true)
+            {
+                string[] data = File.ReadAllLines(openFile.FileName);
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (data[i].Contains("Productnaam"))
+                    {
+                        int index = data[i].IndexOf(':') + 1;
+                        name = data[i].Substring(index, data[i].Length - index).Trim(' ');
+                        MessageBox.Show(name);
+                    }
+                    if (data[i].Contains("Nieuwe prijs"))
+                    {
+                        int index = data[i].IndexOf(':') + 1;
+                        price =ConvertToDecimal(data[i].Substring(index, data[i].Length - index).Trim(' '),"Prijs is niet correct!");
+                        MessageBox.Show(name);
+                    }
+                }
+
+                using (MagazijnEntities ctx = new MagazijnEntities())
+                {
+                    Product prod = ctx.Products.Where(x => x.Naam == name).FirstOrDefault();
+                    prod.Inkoopprijs = price;
+                    ctx.SaveChanges();
+                }
+                MessageBox.Show("Product gewijzigd!");
+            }
         }
     }
 }

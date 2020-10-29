@@ -69,6 +69,13 @@ Dinsdag 27/10
 Woensdag 28/10
 	-binnengekomen orders kunnen worden bevestigd
 	-er wordt ook gecontroleerd tegenover de stock
+	-de nodige entries worden toegevoegd aan de DB 
+	-bestelbon naar pdf; veel werk. geleerd dat een listview beter gevuld word via een apart 'view'-object 
+	-klasse aangemaakt voor bestelbon view
+	-opmaak van pdf bestand
+
+donderdag 29/10
+	-user restricties toegevoegd
 
 
 
