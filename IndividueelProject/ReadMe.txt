@@ -64,6 +64,15 @@ Dinsdag 27/10
 	-bestelling bij leverancier; pop-up gemaakt voor aantal.
 	-klasses order en line aangemaakt om gemakkelijk een bestelling bij te houden
 	-verwijderen van een Lijn is nu mogelijk
+	-automatisch Orders  
+
+Woensdag 28/10
+	-binnengekomen orders kunnen worden bevestigd
+	-er wordt ook gecontroleerd tegenover de stock
+
+
+
+
 
 
 

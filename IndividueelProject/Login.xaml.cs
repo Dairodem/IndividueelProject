@@ -22,6 +22,7 @@ namespace IndividueelProject
 
     public partial class Login : Window
     {
+
         public Login()
         {
             InitializeComponent();
@@ -46,6 +47,9 @@ namespace IndividueelProject
                     if (user.Wachtwoord == TxtPass.Text)
                     {
                         MagazijnWindow magazijnWindow = new MagazijnWindow();
+
+                        magazijnWindow.User = user;
+
                         magazijnWindow.Owner = Application.Current.MainWindow;
                         magazijnWindow.Show();
                         magazijnWindow.Owner = null;

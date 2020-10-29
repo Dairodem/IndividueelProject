@@ -20,12 +20,11 @@ namespace IndividueelProject
     public partial class WindowQuantity : Window
     {
         public int Quantity { get; set; }
-        private int quantity = 0;
+        private int quantity = 1;
         public WindowQuantity()
         {
             InitializeComponent();
 
-            quantity = 0;
             txtQuantity.Text = quantity.ToString();
         }
         private void AddQuantity(int number)
@@ -33,28 +32,22 @@ namespace IndividueelProject
             quantity += number;
             txtQuantity.Text = quantity.ToString();
         }
-
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             AddQuantity(1);
         }
-
         private void btn5_Click(object sender, RoutedEventArgs e)
         {
             AddQuantity(5);
         }
-
-
         private void btn10_Click(object sender, RoutedEventArgs e)
         {
             AddQuantity(10);
         }
-
         private void btn50_Click(object sender, RoutedEventArgs e)
         {
             AddQuantity(50);
         }
-
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             Quantity = quantity;

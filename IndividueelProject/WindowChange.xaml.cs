@@ -30,6 +30,7 @@ namespace IndividueelProject
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string str = toChange ? "bewerken" : "verwijderen";
+            btnChange.Content = toChange ? "Bewerk" : "Verwijder";
 
             switch (Selector)
             {
@@ -119,7 +120,11 @@ namespace IndividueelProject
                     MessageBox.Show($"Geen Selector gevonden met naam {Selector}");
                     break;
             }
-            DialogResult = true;
+            if (thisId != 0)
+            {
+
+                DialogResult = true;
+            }
 
         }
     }

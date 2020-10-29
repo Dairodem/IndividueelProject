@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Pdf.Tables;
 
 namespace IndividueelProject
 {
@@ -31,6 +39,7 @@ namespace IndividueelProject
      *               -extra knop bij 'product' om document in te lezen
      *               
      *               
+     * CreatePDF verder afwerken
      *
      * overzichtTab uitwerken
      * -Sorteer opties
@@ -39,8 +48,8 @@ namespace IndividueelProject
      * 
      * 
      * bestellingTab uitwerken
-     *-list van leveranciers/klanten
-     *-totale prijs
+     *  -Stock aanpassen wanneer bestelling is gelukt
+     *  -Orders tonen in lijst
      *
      * 
      */
@@ -48,8 +57,12 @@ namespace IndividueelProject
 
     public partial class MagazijnWindow : Window
     {
+        public Personeelslid User = new Personeelslid();
+        public int quantity;
+
         private int myId = 0;
         private string[] overzichtArr = new string[] { "Stock", "Producten", "Klanten", "Leveranciers", "Personeel" };
+        private string[] functieArr = new string[] { "Admin", "Magazijn", "Verkoop"};
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
@@ -86,18 +99,25 @@ namespace IndividueelProject
         Product product = new Product();
         Personeelslid person = new Personeelslid();
         Subcategorie cat = new Subcategorie();
-        Order order = new Order();
+        Order orderOUT = new Order();
+        Order orderIN = new Order();
+        List<Order> orderList = new List<Order>();
+        Random rand = new Random();
+        ListViewItem selectedOrder = new ListViewItem();
 
         string selection = "";
         string errorText = "";
         bool isError = false;
         bool toChange = false;
-        public int quantity = 0;
-        public int Linecount { get; set; }
 
         public MagazijnWindow()
         {
             InitializeComponent();
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                Bestelling order = ctx.Bestellings.Where(x => x.Id == 2).FirstOrDefault();
+                CreatePDF(order);
+            }
 
             rbNew.IsChecked = true;
             rbCust.IsChecked = true;
@@ -105,11 +125,44 @@ namespace IndividueelProject
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
             CbxOverzicht.ItemsSource = overzichtArr;
-            LvOverzichtAankoop2.ItemsSource = order.LineList;
             CbxOverzicht.SelectedIndex = 0;
+            CbxFunction.ItemsSource = functieArr;
+            CbxFunction.SelectedIndex = 0;
+            LvOverzichtAankoop2.ItemsSource = orderOUT.LineList;
+
+            orderList.Clear();
+            orderList.Add(new Order() { LineList = RandomLines(true), OrderedBy = "Car-Repair" });
+            orderList.Add(new Order() { LineList = RandomLines(), OrderedBy = "Car-Repair" });
+            orderList.Add(new Order() { LineList = RandomLines(), OrderedBy = "Onderdelen Vanhoutten" });
+            orderList.Add(new Order() { LineList = RandomLines(), OrderedBy = "Garage Van Mechelen" });
+            orderList.Add(new Order() { LineList = RandomLines(), OrderedBy = "Garage Opsomer" });
+
+            lvOrders.ItemsSource = orderList;
+            LvOverzichtVerkoop.ItemsSource = orderList;
+
             RefreshDealerList(cbAankoopBij);
             ChangeWidth();
+        }
+        private void SetUserAccessFor(Personeelslid user)
+        {
+            switch (user.Afdeling)
+            {
+
+                case "Magazijn":
+                    break;
+
+                case "Verkoop":
+                    break;
+
+                case "Admin":
+                    break;
+
+                case "Gamer":
+                default:
+                    break;
+            }
         }
         private void ChangeColumns(string view)
         {
@@ -328,7 +381,17 @@ namespace IndividueelProject
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
+                toComboBox.ItemsSource = null;
                 toComboBox.ItemsSource = ctx.Leveranciers.Select(l => l.Bedrijf).ToList();
+                toComboBox.SelectedIndex = 0;
+            }
+        }
+        private void RefreshCategoryList(ComboBox toComboBox)
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                toComboBox.ItemsSource = null;
+                toComboBox.ItemsSource = ctx.Subcategories.Select(l => l.Naam).ToList();
                 toComboBox.SelectedIndex = 0;
             }
         }
@@ -344,6 +407,159 @@ namespace IndividueelProject
             TxtTel.Text = "";
             TxtRemark.Text = "";
             DpDate.SelectedDate = DateTime.Now;
+        }
+        private List<Line> RandomLines(bool test = false)
+        {
+            List<Line> myList = new List<Line>();
+            Product prod = new Product();
+
+            int count = 1;
+            int select = 0;
+
+            if (!test)
+            {
+                count = rand.Next(1, 5);
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                int qty = rand.Next(1, 10);
+
+                using (MagazijnEntities ctx = new MagazijnEntities())
+                {
+                    List<Product> allproducts = ctx.Products.Select(x => x).ToList();
+                    if (test)
+                    {
+                        select = 9;
+                        qty = 2;
+                    }
+                    else
+                    {
+                        select = rand.Next(1, allproducts.Count);
+
+                    }
+                    prod = allproducts[select];
+                }
+
+                myList.Add(new Line(prod, qty));
+
+            }
+
+            return myList;
+        }
+        private void CreatePDF(Bestelling bestelling)
+        {
+            using (PdfDocument document = new PdfDocument())
+            {
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                RectangleF bounds = new RectangleF(0, 0, graphics.ClientSize.Width, 100);
+                PdfBrush headerBrush = new PdfSolidBrush(new PdfColor());
+                PdfBitmap headerImg = new PdfBitmap("Res/Bestelbon_header.jpg");
+                DateTime date = (DateTime)bestelling.DatumOpgemaakt;
+
+                string currentDate = $"Datum: {date.ToString("dd-MM-yyy")}";
+                string currentStr = "";
+                int marge = 20;
+
+                //fonts 
+                PdfFont fontH = new PdfStandardFont(PdfFontFamily.Helvetica, 18,PdfFontStyle.Bold);
+                PdfFont fonth = new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Bold);
+                PdfFont fontn = new PdfStandardFont(PdfFontFamily.Helvetica, 12, PdfFontStyle.Regular);
+                PdfFont fontN = new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Regular);
+
+                //Draw header
+                graphics.DrawImage(headerImg, bounds);
+
+                //Draw 'Bestelbon'
+                graphics.DrawString("Bestelbon", fontH, PdfBrushes.Black, new PointF(0, 120));
+
+                //draw header voor bestelnr en datum
+                bounds = new RectangleF(0, bounds.Bottom + 60, graphics.ClientSize.Width, 24);
+                graphics.DrawRectangle(PdfBrushes.Linen, bounds);
+                PdfTextElement element = new PdfTextElement($"Bestelnr: {bestelling.Id}", fonth);
+                element.Brush = PdfBrushes.Black;
+                PdfLayoutResult result = element.Draw(page, new PointF(10, bounds.Top + 5));
+
+                SizeF textSize = fonth.MeasureString(currentDate);
+                PointF textPosition = new PointF(graphics.ClientSize.Width - textSize.Width - 10, result.Bounds.Y);
+
+                //Draw datum in header
+                graphics.DrawString(currentDate, fonth, element.Brush, textPosition);
+
+                //draw klantgegevens
+                using (MagazijnEntities ctx = new MagazijnEntities())
+                {
+                    Klant klant = ctx.Klants.Where(x => x.Id == bestelling.IdKlant).FirstOrDefault();
+                    currentStr =$"{klant.Bedrijf}\n{klant.Straatnaam} {klant.Huisnummer}{klant.Bus}\n{klant.Postcode} {klant.Gemeente}";
+                }
+
+                element = new PdfTextElement(currentStr, fontn);
+                result = element.Draw(page, new PointF(10, result.Bounds.Bottom + marge));
+
+                //Draw lijn onder klant
+                PdfPen pen = new PdfPen(PdfBrushes.Black);
+                PointF start = new PointF(0, result.Bounds.Bottom + 3);
+                PointF end = new PointF(graphics.ClientSize.Width, result.Bounds.Bottom + 3);
+                graphics.DrawLine(pen, start, end);
+
+                PdfGrid grid = new PdfGrid();
+                using (MagazijnEntities ctx = new MagazijnEntities())
+                {
+                    List<BestellingProduct> bpList = ctx.BestellingProducts.Where(x => x.IdBestelling == bestelling.Id).ToList();
+                    Order myOrder = new Order();
+
+                    foreach (BestellingProduct item in bpList)
+                    {
+                        Product product = ctx.Products.Where(x => x.Id == item.IdProduct).FirstOrDefault();
+                        myOrder.LineList.Add(new Line(product, (int)item.Aantal));
+                    }
+
+                    OrderView orderView = new OrderView(myOrder);
+
+                    grid.DataSource = orderView.ViewList;
+                }
+
+
+                //grid cell styles
+                PdfGridCellStyle cellStyle = new PdfGridCellStyle();
+                cellStyle.Borders.All = PdfPens.White;
+                cellStyle.Borders.Bottom = new PdfPen(new PdfColor(217, 217, 217), 0.70f);
+                cellStyle.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12f);
+                cellStyle.TextBrush = new PdfSolidBrush(new PdfColor(131, 130, 136));
+                PdfGridRow header = grid.Headers[0];
+                //Creates the header style
+                PdfGridCellStyle headerStyle = new PdfGridCellStyle();
+                headerStyle.Borders.All = new PdfPen(new PdfColor(126, 151, 173));
+                headerStyle.BackgroundBrush = new PdfSolidBrush(new PdfColor(126, 151, 173));
+                headerStyle.TextBrush = PdfBrushes.White;
+                headerStyle.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 14f, PdfFontStyle.Regular);
+
+                //Adds cell customizations
+                for (int i = 0; i < header.Cells.Count; i++)
+                {
+                    if (i == 0 || i == 1)
+                    {
+                        header.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+                    }
+                    else
+                    {
+                        header.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+                    }
+                }
+
+                //Applies the header style
+                header.ApplyStyle(headerStyle);
+                //Creates the layout format for grid
+                PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+                // Creates layout format settings to allow the table pagination
+                layoutFormat.Layout = PdfLayoutType.Paginate;
+                //Draws the grid to the PDF page.
+                PdfGridLayoutResult gridResult = grid.Draw(page, new RectangleF(new PointF(0, result.Bounds.Bottom + 40), new SizeF(graphics.ClientSize.Width, graphics.ClientSize.Height - 100)), layoutFormat);
+
+
+                document.Save($"Bestellingen/Test2.pdf");
+            }
         }
 
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -541,6 +757,8 @@ namespace IndividueelProject
         private void rbProd_Checked(object sender, RoutedEventArgs e)
         {
             ClearAllText();
+            RefreshDealerList(CbxDealer);
+            RefreshCategoryList(CbxCat);
 
             LblName.Visibility = Visibility.Visible;
             TxtName.Visibility = Visibility.Visible;
@@ -859,10 +1077,9 @@ namespace IndividueelProject
                     break;
             }
         }
-
         private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            order.LineList.Clear();
+            orderOUT.LineList.Clear();
 
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
@@ -887,12 +1104,13 @@ namespace IndividueelProject
 
             Button btn = sender as Button;
             Product product = (Product)btn.DataContext;
-            order.LineList.Add(new Line(product, windowQuantity.Quantity));
+
+            orderOUT.LineList.Add(new Line(product, windowQuantity.Quantity));
+            txtTotal.Text = $"€ {orderOUT.GetTotal()}";
 
             LvOverzichtAankoop2.ItemsSource = null;
-            LvOverzichtAankoop2.ItemsSource = order.LineList;
+            LvOverzichtAankoop2.ItemsSource = orderOUT.LineList;
         }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             WindowChange windowDelete = new WindowChange();
@@ -903,45 +1121,47 @@ namespace IndividueelProject
 
             myId = windowDelete.thisId;
 
-
-            using (MagazijnEntities ctx = new MagazijnEntities())
+            if (windowDelete.DialogResult == true)
             {
-                switch (selection)
+                using (MagazijnEntities ctx = new MagazijnEntities())
                 {
-                    case "Klant":
-                        klant = ctx.Klants.Where(x => x.Id == myId).FirstOrDefault();
-                        ctx.Klants.Remove(klant);
-                        break;
 
-                    case "Leverancier":
-                        dealer = ctx.Leveranciers.Where(x => x.Id == myId).FirstOrDefault();
-                        ctx.Leveranciers.Remove(dealer);
-                        break;
+                    switch (selection)
+                    {
+                        case "Klant":
+                            klant = ctx.Klants.Where(x => x.Id == myId).FirstOrDefault();
+                            ctx.Klants.Remove(klant);
+                            break;
 
-                    case "Product":
-                        product = ctx.Products.Where(x => x.Id == myId).FirstOrDefault();
-                        ctx.Products.Remove(product);
-                        break;
+                        case "Leverancier":
+                            dealer = ctx.Leveranciers.Where(x => x.Id == myId).FirstOrDefault();
+                            ctx.Leveranciers.Remove(dealer);
+                            break;
 
-                    case "Personeel":
-                        person = ctx.Personeelslids.Where(x => x.Id == myId).FirstOrDefault();
-                        ctx.Personeelslids.Remove(person);
-                        break;
+                        case "Product":
+                            product = ctx.Products.Where(x => x.Id == myId).FirstOrDefault();
+                            ctx.Products.Remove(product);
+                            break;
 
-                    case "Categorie":
-                        cat = ctx.Subcategories.Where(x => x.Id == myId).FirstOrDefault();
-                        ctx.Subcategories.Remove(cat);
-                        break;
+                        case "Personeel":
+                            person = ctx.Personeelslids.Where(x => x.Id == myId).FirstOrDefault();
+                            ctx.Personeelslids.Remove(person);
+                            break;
 
-                    default:
-                        MessageBox.Show($"Geen Selector gevonden met naam {selection}");
-                        break;
-                }
+                        case "Categorie":
+                            cat = ctx.Subcategories.Where(x => x.Id == myId).FirstOrDefault();
+                            ctx.Subcategories.Remove(cat);
+                            break;
 
-                MessageBoxResult result = MessageBox.Show("Weet u zeker dat u dit element wilt verwijderen?", "Bevestiging",MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                {
-                    ctx.SaveChanges();
+                        default:
+                            MessageBox.Show($"Geen Selector gevonden met naam {selection}");
+                            break;
+                    }
+                    MessageBoxResult result = MessageBox.Show("Weet u zeker dat u dit element wilt verwijderen?", "Bevestiging", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        ctx.SaveChanges();
+                    }
                 }
             }
 
@@ -952,14 +1172,110 @@ namespace IndividueelProject
             Button btn = sender as Button;
             Line line = (Line)btn.DataContext;
 
-            order.LineList.Remove(line);
+            orderOUT.LineList.Remove(line);
+            txtTotal.Text = $"€ {orderOUT.GetTotal()}";
 
             LvOverzichtAankoop2.ItemsSource = null;
-            LvOverzichtAankoop2.ItemsSource = order.LineList;
+            LvOverzichtAankoop2.ItemsSource = orderOUT.LineList;
         }
-
         private void btnMakeOrder_Click(object sender, RoutedEventArgs e)
         {
+            string name = cbAankoopBij.SelectedItem.ToString();
+
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                Leverancier mydealer = ctx.Leveranciers.Where(x => x.Bedrijf == name).FirstOrDefault();
+
+                ctx.Bestellings.Add(new Bestelling() { DatumOpgemaakt = DateTime.Now, IdLeverancier = mydealer.Id, IdPersoneelslid = User.Id });
+            }
+        }
+        private void AcceptOrder_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Order geaccepteerd!");
+
+            //
+        }
+
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            selectedOrder = sender as ListViewItem;
+
+            if (selectedOrder != null || selectedOrder.IsSelected)
+            {
+                LvOverzichtVerkoop.ItemsSource = (selectedOrder.Content as Order).LineList;
+            }
+
+        }
+
+        private void btnAccept_Click(object sender, RoutedEventArgs e)
+        {
+            using (MagazijnEntities ctx = new MagazijnEntities())
+            {
+                // Controle tegenover stock
+                List<Stock> stock = ctx.Stocks.Select(x => x).ToList();
+                bool canSell = false;
+                string errorStock = "";
+
+                foreach (Line line in (selectedOrder.Content as Order).LineList)
+                {
+                    foreach (Stock prod in stock)
+                    {
+                        if (prod.IdProduct == line.Product.Id)
+                        {
+                            if (prod.Aantal > line.Quantity)
+                            {
+                                canSell = true;
+                            }
+                            else
+                            {
+                                errorStock += $"- {line.Product.Naam}\n";
+                                canSell = false;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (!canSell)
+                    {
+                        errorStock += $"- {line.Product.Naam}\n";
+                    }
+                }
+
+                if (errorStock == "")
+                {
+                    // toevoegen aan Bestelling-table
+                    string company = (lvOrders.SelectedItem as Order).OrderedBy;
+
+                    int id = ctx.Klants.Where(x => x.Bedrijf == company).Select(x => x.Id).FirstOrDefault();
+                    Bestelling myOrder = new Bestelling() { DatumOpgemaakt = DateTime.Now, IdPersoneelslid = User.Id, IdKlant = id };
+                    ctx.Bestellings.Add(myOrder);
+                    ctx.SaveChanges();
+
+                    // toevoegen aan BestellingProduct
+                    foreach (Line line in (selectedOrder.Content as Order).LineList)
+                    {
+                        ctx.BestellingProducts.Add(new BestellingProduct() { IdBestelling = myOrder.Id, IdProduct = line.Product.Id, Aantal = line.Quantity });
+                    }
+
+                    // opslaan
+                    ctx.SaveChanges();
+
+                    // verwijderen uit orderlijst en overzicht leegmaken
+                    orderList.Remove((Order)lvOrders.SelectedItem);
+                    LvOverzichtVerkoop.ItemsSource = null;
+
+                    // orderoverzicht refreshen
+                    lvOrders.ItemsSource = null;
+                    lvOrders.ItemsSource = orderList;
+
+                }
+                else
+                {
+                    MessageBox.Show($"Niet op voorraad:\n{errorStock}");
+                }
+
+            }
+
 
         }
     }

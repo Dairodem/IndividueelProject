@@ -9,6 +9,7 @@ namespace IndividueelProject
     public class Order
     {
         public List<Line> LineList { get; set; }
+        public string OrderedBy { get; set; }
 
         public Order()
         {
