@@ -54,13 +54,41 @@
                     <ListView x:Name="LvOverzicht" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn x:Name="colID" Header="ID" Width="auto"/>
-                                <GridViewColumn x:Name="col1" Width="auto"/>
-                                <GridViewColumn x:Name="col2" Width="auto"/>
-                                <GridViewColumn x:Name="col3" Width="auto"/>
-                                <GridViewColumn x:Name="col4" Width="auto"/>
-                                <GridViewColumn x:Name="col5" Width="auto"/>
-                                <GridViewColumn x:Name="col6" Width="auto"/>
+                                <GridViewColumn x:Name="colID" Width="auto">
+                                <GridViewColumn.Header >
+                                    <GridViewColumnHeader x:Name="h0" Tag="Id" Click="lvOverzichtHeader_Click" >ID</GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col1" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h1" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col2" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h2" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col3" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h3" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col4" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h4" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col5" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h5" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="col6" Width="auto">
+                                <GridViewColumn.Header >
+                                        <GridViewColumnHeader x:Name="h6" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                </GridViewColumn.Header>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -220,7 +248,6 @@
                                                                             <Image Source="Images/Delete_Icon.png" Height="14"/>
                                                                         </Button>
                                                                     </DataTemplate>
-
                                                                 </GridViewColumn.CellTemplate>
                                                             </GridViewColumn>
                                                         </GridView>
@@ -230,9 +257,7 @@
                                                 <TextBlock x:Name="txtTotal" Grid.Column="0" Grid.Row="1" Text="€ 0,00" HorizontalAlignment="Right" Margin="0,0,5,0"/>
                                             </Grid>
                                         </Expander>
-
                                         <Button x:Name="btnMakeOrder" Content="Bestel" Grid.Column="1" Grid.Row="3" Click="btnMakeOrder_Click"/>
-
                                     </Grid>
 
                                 </Grid>
@@ -325,18 +350,28 @@
                                 </Grid.RowDefinitions>
 
                                 <!--binnenkomende orderlijst-->
-                                <ListView x:Name="LvOverzichtOrders" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                <ListView x:Name="lvOverzichtOrders" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding OderedBy}" Header="Klant" Width="300"/>
-                                            <GridViewColumn Header="Accepteer" Width="70">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate DataType="x:Type loc:Order">
-                                                        <StackPanel Orientation="Horizontal" Height="50">
-                                                            <Button x:Name="btnAcceptOrder" Content="+" Width="20" Click="AcceptOrder_Click"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
+                                            <GridViewColumn DisplayMemberBinding="{Binding InOut}" Width="50">
+                                                <GridViewColumn.Header >
+                                                    <GridViewColumnHeader Tag="InOut" Click="lvOverzichtOrdersHeader_Click" >Type</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                            </GridViewColumn>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Bedrijf}" Width="250">
+                                                <GridViewColumn.Header >
+                                                    <GridViewColumnHeader Tag="Bedrijf" Click="lvOverzichtOrdersHeader_Click" >Bedrijf</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                            </GridViewColumn>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Datum}" Width="80">
+                                                <GridViewColumn.Header >
+                                                    <GridViewColumnHeader Tag="Datum" Click="lvOverzichtOrdersHeader_Click" >Datum</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
+                                            </GridViewColumn>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Totaal}" Width="80">
+                                                <GridViewColumn.Header >
+                                                    <GridViewColumnHeader Tag="Totaal" Click="lvOverzichtOrdersHeader_Click" >Totaal</GridViewColumnHeader>
+                                                </GridViewColumn.Header>
                                             </GridViewColumn>
                                         </GridView>
                                     </ListView.View>

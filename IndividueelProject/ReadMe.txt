@@ -76,6 +76,9 @@ Woensdag 28/10
 
 donderdag 29/10
 	-user restricties toegevoegd
+	-template kan worden ingelezen om prijs van product aan te passen
+	-bij het aankopen wordt de bestelling gewist wnr men verandert van leverancier
+	-data naar Db en stock wordt aangepast bij bestelling leverancier
 
 
 

@@ -7,10 +7,10 @@ using System.Windows.Navigation;
 
 namespace IndividueelProject
 {
-    public class OrderView
+    public class PdfListView
     {
         public List<Entry> ViewList { get; }
-        public OrderView(Order order)
+        public PdfListView(Order order)
         {
             ViewList = new List<Entry>();
 
@@ -32,7 +32,7 @@ namespace IndividueelProject
         public string Product { get; set; }
         public string Categorie { get; set; }
         public decimal Eenheidsprijs { get; set; }
-        public int aantal { get; set; }
+        public int Aantal { get; set; }
         public decimal Totaal { get; set; }
 
         public Entry(string product, string categorie, decimal eenheidsprijs, int aantal, decimal totaal)
@@ -40,7 +40,7 @@ namespace IndividueelProject
             Product = product;
             Categorie = categorie;
             Eenheidsprijs = eenheidsprijs;
-            this.aantal = aantal;
+            Aantal = aantal;
             Totaal = totaal;
         }
     }

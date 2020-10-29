@@ -83,6 +83,9 @@
     <Compile Include="Categorie.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CustomerView.cs" />
+    <Compile Include="DealerView.cs" />
+    <Compile Include="EmployeeView.cs" />
     <Compile Include="Klant.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
@@ -109,16 +112,19 @@
       <DependentUpon>MagazijnWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Order.cs" />
-    <Compile Include="OrderView.cs" />
+    <Compile Include="OrdersView.cs" />
+    <Compile Include="PdfListView.cs" />
     <Compile Include="Personeelslid.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ProductView.cs" />
     <Compile Include="Stock.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="StockView.cs" />
     <Compile Include="Subcategorie.cs">
       <DependentUpon>MagazijnDataModel.tt</DependentUpon>
     </Compile>

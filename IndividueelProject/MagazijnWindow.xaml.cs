@@ -23,6 +23,8 @@ using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf.Tables;
 using Microsoft.Win32;
 using System.IO;
+using System.Diagnostics;
+using Syncfusion.XPS;
 
 namespace IndividueelProject
 {
@@ -41,7 +43,6 @@ namespace IndividueelProject
      *               
      *  
      * bestellingTab uitwerken
-     *  -Stock aanpassen wanneer bestelling is gelukt
      *  -Orders tonen in lijst in & out apart (met keuze om meerdere te printen als dit nog niet is gebeurd)    
      *  
      *  
@@ -66,8 +67,10 @@ namespace IndividueelProject
         public int quantity;
 
         private int myId = 0;
+        private int prevIndex = 0;
         private string[] overzichtArr = new string[] { "Stock", "Producten", "Klanten", "Leveranciers", "Personeel" };
         private string[] functieArr = new string[] { "Admin", "Magazijn", "Verkoop"};
+        private GridViewColumnHeader listViewSortCol = null;
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
@@ -109,6 +112,7 @@ namespace IndividueelProject
         List<Order> orderList = new List<Order>();
         Random rand = new Random();
         ListViewItem selectedOrder = new ListViewItem();
+        OrdersView ordersView = new OrdersView();
 
         string selection = "";
         string errorText = "";
@@ -123,6 +127,10 @@ namespace IndividueelProject
                 Bestelling order = ctx.Bestellings.Where(x => x.Id == 2).FirstOrDefault();
                 //CreatePDF(order);
             }
+            lvOverzichtOrders.ItemsSource = ordersView.AllOrders;
+
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvOverzichtOrders.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("InOut", ListSortDirection.Ascending));
 
             rbNew.IsChecked = true;
             rbCust.IsChecked = true;
@@ -191,45 +199,59 @@ namespace IndividueelProject
             {
                 case "Stock":
                     colID.DisplayMemberBinding = new Binding("ps2.ps.s.Id");
+                    h0.Tag = "ps2.ps.s.Id";
                     colID.Width = 30;
                     col1.DisplayMemberBinding = new Binding("ps2.Naam");
+                    h1.Tag = "ps2.Naam";
                     col1.Header = "Cat.";
                     col1.Width = 150;
                     col2.DisplayMemberBinding = new Binding("ps2.ps.p.Naam");
+                    h2.Tag = "ps2.ps.p.Naam";
                     col2.Header = "Naam";
                     col2.Width = 250;
                     col3.DisplayMemberBinding = new Binding("ps2.ps.s.Aantal");
+                    h3.Tag = "ps2.ps.s.Aantal";
                     col3.Header = "Aantal";
                     col3.Width = 50;
                     col4.DisplayMemberBinding = new Binding("ps2.ps.p.Eenheid");
+                    h4.Tag = "ps2.ps.p.Eenheid";
                     col4.Header = "Eenheid";
                     col4.Width = 60;
                     col5.DisplayMemberBinding = new Binding("l.Bedrijf");
+                    h5.Tag = "l.Bedrijf";
                     col5.Header = "Leverancier";
                     col5.Width = 100;
                     col6.DisplayMemberBinding = new Binding("x");
+                    h6.Tag ="";
                     col6.Header = "";
                     col6.Width = 2;
                     break;
                 case "Producten":
                     colID.DisplayMemberBinding = new Binding("pc.p.Id");
+                    h6.Tag = "";
                     colID.Width = 30;
                     col1.DisplayMemberBinding = new Binding("pc.Naam");
+                    h6.Tag = "";
                     col1.Header = "Cat.";
                     col1.Width = 150;
                     col2.DisplayMemberBinding = new Binding("pc.p.Naam");
+                    h6.Tag = "";
                     col2.Header = "Naam";
                     col2.Width = 250;
                     col3.DisplayMemberBinding = new Binding("pc.p.Inkoopprijs");
+                    h6.Tag = "";
                     col3.Header = "Inkoopprijs";
                     col3.Width = 100;
                     col4.DisplayMemberBinding = new Binding("pc.p.Eenheid");
+                    h6.Tag = "";
                     col4.Header = "Eenheid";
                     col4.Width = 60;
                     col5.DisplayMemberBinding = new Binding("pc.p.Marge");
+                    h6.Tag = "";
                     col5.Header = "Marge";
                     col6.Width = 50;
                     col6.DisplayMemberBinding = new Binding("pc.p.BTW");
+                    h6.Tag = "";
                     col6.Header = "BTW";
                     col6.Width = 50;
                     break;
@@ -536,7 +558,7 @@ namespace IndividueelProject
                         myOrder.LineList.Add(new Line(product, (int)item.Aantal));
                     }
 
-                    OrderView orderView = new OrderView(myOrder);
+                    PdfListView orderView = new PdfListView(myOrder);
 
                     grid.DataSource = orderView.ViewList;
                 }
@@ -1105,20 +1127,31 @@ namespace IndividueelProject
         }
         private void cbAankoopBij_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            orderOUT.LineList.Clear();
+            if (orderOUT.LineList.Count != 0 && cbAankoopBij.SelectedIndex != prevIndex)
+            {
+                MessageBoxResult result = MessageBox.Show("Bestelling zal gewist worden!", "Confirmatie", MessageBoxButton.OKCancel);
+
+                if (result == MessageBoxResult.OK)
+                {
+                    orderOUT.LineList.Clear();
+                    LvOverzichtAankoop2.ItemsSource = null;
+                }
+                else
+                {
+                    cbAankoopBij.SelectedIndex = prevIndex;
+                }
+            }
+
+            txtTotal.Text = $"€ {orderOUT.GetTotal()}";
 
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
                 Leverancier myDealer = ctx.Leveranciers.Where(d => d.Bedrijf == (string)cbAankoopBij.SelectedItem).FirstOrDefault();
 
                 LvOverzichtAankoop1.ItemsSource = ctx.Products.Where(l => l.IdLeverancier == myDealer.Id).ToList();
-                    /*
-                    Join(ctx.Subcategories,
-                    p => p.IdSubcategorie,
-                    c => c.Id,
-                    (p, c) => new { p, c }
-                    ).ToList();*/
             }
+
+            prevIndex = cbAankoopBij.SelectedIndex;
         }
         private void AddToList_Click(object sender, RoutedEventArgs e)
         {
@@ -1212,7 +1245,45 @@ namespace IndividueelProject
             {
                 Leverancier mydealer = ctx.Leveranciers.Where(x => x.Bedrijf == name).FirstOrDefault();
 
-                ctx.Bestellings.Add(new Bestelling() { DatumOpgemaakt = DateTime.Now, IdLeverancier = mydealer.Id, IdPersoneelslid = User.Id });
+                // bestelling aanmaken in DB
+                Bestelling myOrder = new Bestelling() { DatumOpgemaakt = DateTime.Now, IdLeverancier = mydealer.Id, IdPersoneelslid = User.Id };
+                ctx.Bestellings.Add(myOrder);
+                ctx.SaveChanges();
+
+                // controleren of product al dan niet in stock is
+                List<Stock> myStock = ctx.Stocks.Select(x => x).ToList();
+
+                foreach (Line line in orderOUT.LineList)
+                {
+                    bool inStock = false;
+
+                    ctx.BestellingProducts.Add(new BestellingProduct() { IdBestelling = myOrder.Id, IdProduct = line.Product.Id, Aantal = line.Quantity });
+
+                    foreach (Stock item in myStock)
+                    {
+                        if (line.Product.Id == item.IdProduct)
+                        {
+                            //Match gevonden, aantal bij stock tellen
+                            item.Aantal += line.Quantity;
+                            inStock = true;
+
+                            break;
+                        }
+                    }
+
+                    // wanneer niet in stock: nieuwe entry
+                    if (!inStock)
+                    {
+                        ctx.Stocks.Add(new Stock() { IdProduct = line.Product.Id, Aantal = line.Quantity, Verkocht = 0 });
+                    }
+                }
+
+                // opslaan
+                ctx.SaveChanges();
+                MessageBox.Show("Bestelling geplaatst!");
+                orderOUT.LineList.Clear();
+                txtTotal.Text = $"€ {orderOUT.GetTotal()}";
+
             }
         }
         private void AcceptOrder_Click(object sender, RoutedEventArgs e)
@@ -1277,10 +1348,14 @@ namespace IndividueelProject
                     ctx.Bestellings.Add(myOrder);
                     ctx.SaveChanges();
 
-                    // toevoegen aan BestellingProduct
+                    // toevoegen aan BestellingProduct en stock aanpassen
                     foreach (Line line in (selectedOrder.Content as Order).LineList)
                     {
                         ctx.BestellingProducts.Add(new BestellingProduct() { IdBestelling = myOrder.Id, IdProduct = line.Product.Id, Aantal = line.Quantity });
+                        Stock myStock = ctx.Stocks.Where(x => x.IdProduct == line.Product.Id).FirstOrDefault();
+
+                        myStock.Aantal -= line.Quantity;
+                        myStock.Verkocht += line.Quantity;
                     }
 
                     // opslaan
@@ -1341,5 +1416,38 @@ namespace IndividueelProject
                 MessageBox.Show("Product gewijzigd!");
             }
         }
+        private void lvOverzichtOrdersHeader_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = (sender as GridViewColumnHeader);
+            string sortBy = column.Tag.ToString();
+            if (listViewSortCol != null)
+            {
+                lvOverzichtOrders.Items.SortDescriptions.Clear();
+            }
+            
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (listViewSortCol == column )
+                newDir = ListSortDirection.Descending;
+
+            listViewSortCol = column;
+            lvOverzichtOrders.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }
+        private void lvOverzichtHeader_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader column = (sender as GridViewColumnHeader);
+            string sortBy = column.Tag.ToString();
+            if (listViewSortCol != null)
+            {
+                LvOverzicht.Items.SortDescriptions.Clear();
+            }
+
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (listViewSortCol == column)
+                newDir = ListSortDirection.Descending;
+
+            listViewSortCol = column;
+            LvOverzicht.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }
     }
+
 }
