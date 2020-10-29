@@ -71,6 +71,7 @@ namespace IndividueelProject
         private string[] overzichtArr = new string[] { "Stock", "Producten", "Klanten", "Leveranciers", "Personeel" };
         private string[] functieArr = new string[] { "Admin", "Magazijn", "Verkoop"};
         private GridViewColumnHeader listViewSortCol = null;
+        private GridViewColumnHeader listViewSortCol1 = null;
         Dictionary<string, string> sortStockDict = new Dictionary<string, string>()
         {
             {"Id","Id" },
@@ -113,6 +114,7 @@ namespace IndividueelProject
         Random rand = new Random();
         ListViewItem selectedOrder = new ListViewItem();
         OrdersView ordersView = new OrdersView();
+        StockView stockView = new StockView();
 
         string selection = "";
         string errorText = "";
@@ -122,15 +124,9 @@ namespace IndividueelProject
         public MagazijnWindow()
         {
             InitializeComponent();
-            using (MagazijnEntities ctx = new MagazijnEntities())
-            {
-                Bestelling order = ctx.Bestellings.Where(x => x.Id == 2).FirstOrDefault();
-                //CreatePDF(order);
-            }
-            lvOverzichtOrders.ItemsSource = ordersView.AllOrders;
 
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvOverzichtOrders.ItemsSource);
-            view.SortDescriptions.Add(new SortDescription("InOut", ListSortDirection.Ascending));
+            lvOverzichtOrders.ItemsSource = ordersView.AllOrders;
+            LvOverzicht.ItemsSource = stockView.AllStock;
 
             rbNew.IsChecked = true;
             rbCust.IsChecked = true;
@@ -155,6 +151,11 @@ namespace IndividueelProject
 
             lvOrders.ItemsSource = orderList;
             LvOverzichtVerkoop.ItemsSource = orderList;
+
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvOverzichtOrders.ItemsSource);
+            CollectionView viewStock = (CollectionView)CollectionViewSource.GetDefaultView(LvOverzicht.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("InOut", ListSortDirection.Ascending));
+            viewStock.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Ascending));
 
             RefreshDealerList(cbAankoopBij);
             ChangeWidth();
@@ -184,6 +185,9 @@ namespace IndividueelProject
 
                     //bestellingen
                     tabAankoop.Visibility = Visibility.Collapsed;
+                    tabVerkoop.IsSelected = true;
+
+                    //overzicht
                     overzichtArr = new string[] { "Stock", "Producten", "Klanten"};
                     break;
 
@@ -198,33 +202,33 @@ namespace IndividueelProject
             switch (view)
             {
                 case "Stock":
-                    colID.DisplayMemberBinding = new Binding("ps2.ps.s.Id");
-                    h0.Tag = "ps2.ps.s.Id";
+                    colID.DisplayMemberBinding = new Binding("Id");
+                    h0.Tag = "Id";
                     colID.Width = 30;
-                    col1.DisplayMemberBinding = new Binding("ps2.Naam");
-                    h1.Tag = "ps2.Naam";
+                    col1.DisplayMemberBinding = new Binding("Categorie");
+                    h1.Tag = "Categorie";
                     col1.Header = "Cat.";
                     col1.Width = 150;
-                    col2.DisplayMemberBinding = new Binding("ps2.ps.p.Naam");
-                    h2.Tag = "ps2.ps.p.Naam";
+                    col2.DisplayMemberBinding = new Binding("Naam");
+                    h2.Tag = "Naam";
                     col2.Header = "Naam";
                     col2.Width = 250;
-                    col3.DisplayMemberBinding = new Binding("ps2.ps.s.Aantal");
-                    h3.Tag = "ps2.ps.s.Aantal";
+                    col3.DisplayMemberBinding = new Binding("Aantal");
+                    h3.Tag = "Aantal";
                     col3.Header = "Aantal";
                     col3.Width = 50;
-                    col4.DisplayMemberBinding = new Binding("ps2.ps.p.Eenheid");
-                    h4.Tag = "ps2.ps.p.Eenheid";
+                    col4.DisplayMemberBinding = new Binding("Eenheid");
+                    h4.Tag = "Eenheid";
                     col4.Header = "Eenheid";
                     col4.Width = 60;
-                    col5.DisplayMemberBinding = new Binding("l.Bedrijf");
-                    h5.Tag = "l.Bedrijf";
+                    col5.DisplayMemberBinding = new Binding("Leverancier");
+                    h5.Tag = "Leverancier";
                     col5.Header = "Leverancier";
                     col5.Width = 100;
-                    col6.DisplayMemberBinding = new Binding("x");
-                    h6.Tag ="";
-                    col6.Header = "";
-                    col6.Width = 2;
+                    col6.DisplayMemberBinding = new Binding("Verkocht");
+                    h6.Tag ="Verkocht";
+                    col6.Header = "Verkocht";
+                    col6.Width = 50;
                     break;
                 case "Producten":
                     colID.DisplayMemberBinding = new Binding("pc.p.Id");
@@ -302,6 +306,16 @@ namespace IndividueelProject
                 default:
                     break;
             }
+        }
+        private string Try(string text)
+        {
+            if (text.Length == 0)
+            {
+                errorText = "Sommige gegevens zijn niet ingevuld!";
+                isError = true;
+            }
+
+            return text;
         }
         private void ChangeWidth()
         {
@@ -503,12 +517,18 @@ namespace IndividueelProject
 
                 string currentDate = $"Datum: {date.ToString("dd-MM-yyy")}";
                 string currentStr = "";
+                string btwH = "6%\n12%\n21%";
+                string prijs = "";
+                string btw = "";
+                string totalH = "Totaal excl. BTW\nTotaal BTW\nTe betalen";
+                string total = "";
                 int marge = 20;
 
                 //fonts 
                 PdfFont fontH = new PdfStandardFont(PdfFontFamily.Helvetica, 18,PdfFontStyle.Bold);
                 PdfFont fonth = new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Bold);
                 PdfFont fontn = new PdfStandardFont(PdfFontFamily.Helvetica, 12, PdfFontStyle.Regular);
+                PdfFont fontB = new PdfStandardFont(PdfFontFamily.Helvetica, 12, PdfFontStyle.Bold);
                 PdfFont fontN = new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Regular);
 
                 //Draw header
@@ -559,8 +579,12 @@ namespace IndividueelProject
                     }
 
                     PdfListView orderView = new PdfListView(myOrder);
-
                     grid.DataSource = orderView.ViewList;
+
+                    prijs = $"{orderView.Price6}\n{orderView.Price12}\n{orderView.Price21}";
+                    btw = $"{orderView.Tax6}\n{orderView.Tax12}\n{orderView.Tax21}";
+                    total = $"{orderView.TotalPrice}\n{orderView.TotalTax}\n{orderView.TotalPrice + orderView.TotalTax}\n";
+                    
                 }
 
 
@@ -599,38 +623,39 @@ namespace IndividueelProject
                 layoutFormat.Layout = PdfLayoutType.Paginate;
                 //Draws the grid to the PDF page.
                 PdfGridLayoutResult gridResult = grid.Draw(page, new RectangleF(new PointF(0, result.Bounds.Bottom + 40), new SizeF(graphics.ClientSize.Width, graphics.ClientSize.Height - 100)), layoutFormat);
+                bounds = gridResult.Bounds;
+
+                bounds = new RectangleF(0, bounds.Bottom + 60, 100, 100);
+                element = new PdfTextElement(btwH, fontB);
+                result = element.Draw(page, new PointF(10, bounds.Bottom + marge));
+                element = new PdfTextElement(prijs, fontn);
+                result = element.Draw(page, new PointF(70, bounds.Bottom + marge));
+                element = new PdfTextElement(btw, fontn);
+                result = element.Draw(page, new PointF(130, bounds.Bottom + marge));
+
+                element = new PdfTextElement(totalH, fontB);
+                result = element.Draw(page, new PointF(250, bounds.Bottom + marge));
+                element = new PdfTextElement(total, fontn);
+                result = element.Draw(page, new PointF(400, bounds.Bottom + marge));
 
 
-                document.Save($"Bestellingen/Test2.pdf");
+
+                document.Save($"Bestellingen/bestelbon_{bestelling.IdLeverancier}{bestelling.Id}.pdf");
             }
         }
-
         private void CbxOverzicht_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             using (MagazijnEntities ctx = new MagazijnEntities())
             {
+                LvOverzicht.ItemsSource = null;
 
                 switch (CbxOverzicht.SelectedItem.ToString())
                 {
                     case "Stock":
+
                         ChangeColumns("Stock");
-
-                        var stockList = ctx.Products.Join(
-                            ctx.Stocks,
-                            p => p.Id,
-                            s => s.IdProduct,
-                            (p, s) => new { p, s }).Join(
-                            ctx.Subcategories,
-                            ps => ps.p.IdSubcategorie,
-                            c => c.Id,
-                            (ps, c) => new { ps, c.Naam }).Join(
-                            ctx.Leveranciers,
-                            ps2 => ps2.ps.p.IdLeverancier,
-                            l => l.Id,
-                            (ps2, l) => new { ps2, l }).ToList();
-
                         CbxSort.ItemsSource = sortStockDict.Keys;
-                        LvOverzicht.ItemsSource = stockList;
+                        LvOverzicht.ItemsSource = stockView.AllStock;
                         break;
 
                     case "Producten":
@@ -672,18 +697,18 @@ namespace IndividueelProject
         }
         private void CbxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(LvOverzicht.ItemsSource);
+            CollectionView view1 = (CollectionView)CollectionViewSource.GetDefaultView(LvOverzicht.ItemsSource);
 
             switch (CbxSort.SelectedValue)
             {
                 case "Id":
-                    view.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
+                    view1.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
                     break;
                 case "naamUp":
-                    view.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Ascending));
+                    view1.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Ascending));
                     break;
                 case "naamDown":
-                    view.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Descending));
+                    view1.SortDescriptions.Add(new SortDescription("Naam", ListSortDirection.Descending));
                     break;
                 case "catUp":
                     break;
@@ -925,15 +950,15 @@ namespace IndividueelProject
                         {
                             klant = ctx.Klants.Where(k => k.Id == myId).FirstOrDefault();
 
-                            klant.Bedrijf = TxtName.Text;
-                            klant.Straatnaam = TxtStreet.Text;
+                            klant.Bedrijf = Try(TxtName.Text);
+                            klant.Straatnaam = Try(TxtStreet.Text);
                             klant.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
-                            klant.Bus = TxtBus.Text;
-                            klant.Postcode = TxtPostal.Text;
-                            klant.Gemeente = TxtCity.Text;
-                            klant.Emailadres = TxtEmail.Text;
-                            klant.Telefoonnummer = TxtTel.Text;
-                            klant.Opmerking = TxtRemark.Text;
+                            klant.Bus = Try(TxtBus.Text);
+                            klant.Postcode = Try(TxtPostal.Text);
+                            klant.Gemeente = Try(TxtCity.Text);
+                            klant.Emailadres = Try(TxtEmail.Text);
+                            klant.Telefoonnummer = Try(TxtTel.Text);
+                            klant.Opmerking = Try(TxtRemark.Text);
                             klant.AangemaaktOp = DpDate.SelectedDate;
 
                         }
@@ -941,18 +966,21 @@ namespace IndividueelProject
                         {
                             ctx.Klants.Add(new Klant()
                             {
-                                Bedrijf = TxtName.Text,
-                                Straatnaam = TxtStreet.Text,
+                                Bedrijf = Try(TxtName.Text),
+                                Straatnaam = Try(TxtStreet.Text),
                                 Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                                Bus = TxtBus.Text,
-                                Postcode = TxtPostal.Text,
-                                Gemeente = TxtCity.Text,
-                                Emailadres = TxtEmail.Text,
-                                Telefoonnummer = TxtTel.Text,
-                                Opmerking = TxtRemark.Text,
+                                Bus = Try(TxtBus.Text),
+                                Postcode = Try(TxtPostal.Text),
+                                Gemeente = Try(TxtCity.Text),
+                                Emailadres = Try(TxtEmail.Text),
+                                Telefoonnummer = Try(TxtTel.Text),
+                                Opmerking = Try(TxtRemark.Text),
                                 AangemaaktOp = DpDate.SelectedDate
                             });
                         }
+                        LvOverzicht.ItemsSource = null;
+                        stockView = new StockView();
+                        LvOverzicht.ItemsSource = stockView.AllStock;
                         break;
 
                     case "Leverancier":
@@ -961,28 +989,28 @@ namespace IndividueelProject
                         {
                             dealer = ctx.Leveranciers.Where(k => k.Id == myId).FirstOrDefault();
 
-                            dealer.Bedrijf = TxtName.Text;
-                            dealer.Straatnaam = TxtStreet.Text;
+                            dealer.Bedrijf = Try(TxtName.Text);
+                            dealer.Straatnaam = Try(TxtStreet.Text);
                             dealer.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
-                            dealer.Bus = TxtBus.Text;
-                            dealer.Postcode = TxtPostal.Text;
-                            dealer.Gemeente = TxtCity.Text;
-                            dealer.Emailadres = TxtEmail.Text;
-                            dealer.Telefoonnummer = TxtTel.Text;
+                            dealer.Bus = Try(TxtBus.Text);
+                            dealer.Postcode = Try(TxtPostal.Text);
+                            dealer.Gemeente = Try(TxtCity.Text);
+                            dealer.Emailadres = Try(TxtEmail.Text);
+                            dealer.Telefoonnummer = Try(TxtTel.Text);
 
                         }
                         else
                         {
                             ctx.Leveranciers.Add(new Leverancier()
                             {
-                                Bedrijf = TxtName.Text,
-                                Straatnaam = TxtStreet.Text,
+                                Bedrijf = Try(TxtName.Text),
+                                Straatnaam = Try(TxtStreet.Text),
                                 Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                                Bus = TxtBus.Text,
-                                Postcode = TxtPostal.Text,
-                                Gemeente = TxtCity.Text,
-                                Emailadres = TxtEmail.Text,
-                                Telefoonnummer = TxtTel.Text
+                                Bus = Try(TxtBus.Text),
+                                Postcode = Try(TxtPostal.Text),
+                                Gemeente = Try(TxtCity.Text),
+                                Emailadres = Try(TxtEmail.Text),
+                                Telefoonnummer = Try(TxtTel.Text)
                             });
                         }
                         break;
@@ -993,11 +1021,11 @@ namespace IndividueelProject
                         {
                             product = ctx.Products.Where(k => k.Id == myId).FirstOrDefault();
 
-                            product.Naam = TxtName.Text;
+                            product.Naam = Try(TxtName.Text);
                             product.Inkoopprijs = ConvertToDecimal(TxtStreet.Text, "Inkoopprijs niet correct ingegeven");
                             product.Marge = ConvertToInt(TxtNumber.Text, "Incorrecte marge ingegeven");
                             product.BTW = ConvertToInt(TxtBus.Text, "BTW niet juist ingegeven");
-                            product.Eenheid = TxtPostal.Text;
+                            product.Eenheid = Try(TxtPostal.Text);
                             product.IdLeverancier = dealer.Id;
                             product.IdSubcategorie = (int)CbxCat.SelectedValue;
 
@@ -1006,11 +1034,11 @@ namespace IndividueelProject
                         {
                             ctx.Products.Add(new Product()
                             {
-                                Naam = TxtName.Text,
+                                Naam = Try(TxtName.Text),
                                 Inkoopprijs = ConvertToDecimal(TxtStreet.Text, "Inkoopprijs ongeldig!"),
                                 Marge = ConvertToDecimal(TxtNumber.Text, "Marge ongeldig!"),
                                 BTW = ConvertToDecimal(TxtBus.Text, "BTW ongeldig!"),
-                                Eenheid = TxtPostal.Text,
+                                Eenheid = Try(TxtPostal.Text),
                                 IdLeverancier = (int)CbxDealer.SelectedValue,
                                 IdSubcategorie = (int)CbxCat.SelectedValue
                             });
@@ -1022,10 +1050,11 @@ namespace IndividueelProject
                         if (toChange)
                         {
                             person = ctx.Personeelslids.Where(k => k.Id == myId).FirstOrDefault();
-                            person.Voornaam = TxtName.Text;
-                            person.Achternaam = TxtStreet.Text;
-                            person.Login = TxtNumber.Text;
-                            person.Wachtwoord = TxtBus.Text;
+
+                            person.Voornaam = Try(TxtName.Text);
+                            person.Achternaam = Try(TxtStreet.Text);
+                            person.Login = Try(TxtNumber.Text);
+                            person.Wachtwoord = Try(TxtBus.Text);
                             person.Afdeling = CbxFunction.SelectedItem.ToString();
 
                         }
@@ -1033,10 +1062,10 @@ namespace IndividueelProject
                         {
                             ctx.Personeelslids.Add(new Personeelslid()
                             {
-                                Voornaam = TxtName.Text,
-                                Achternaam = TxtStreet.Text,
-                                Login = TxtNumber.Text,
-                                Wachtwoord = TxtBus.Text,
+                                Voornaam = Try(TxtName.Text),
+                                Achternaam = Try(TxtStreet.Text),
+                                Login = Try(TxtNumber.Text),
+                                Wachtwoord = Try(TxtBus.Text),
                                 Afdeling = CbxFunction.SelectedItem.ToString()
                             });
                         }
@@ -1047,13 +1076,13 @@ namespace IndividueelProject
                         if (toChange)
                         {
                             cat = ctx.Subcategories.Where(k => k.Id == myId).FirstOrDefault();
-                            cat.Naam = TxtCity.Text;
+                            cat.Naam = Try(TxtCity.Text);
                         }
                         else
                         {
                             ctx.Subcategories.Add(new Subcategorie()
                             {
-                                Naam = TxtCity.Text
+                                Naam = Try(TxtCity.Text)
                             });
                         }
                         break;
@@ -1071,10 +1100,12 @@ namespace IndividueelProject
                 else
                 {
                     MessageBox.Show(errorText);
+                    errorText = "";
                 }
 
                 isError = false;
             }
+            ClearAllText();
 
         }
         private void rbChange_Checked(object sender, RoutedEventArgs e)
@@ -1361,6 +1392,7 @@ namespace IndividueelProject
                     // opslaan
                     ctx.SaveChanges();
 
+                    CreatePDF(myOrder);
                     // verwijderen uit orderlijst en overzicht leegmaken
                     orderList.Remove((Order)lvOrders.SelectedItem);
                     LvOverzichtVerkoop.ItemsSource = null;
@@ -1377,6 +1409,10 @@ namespace IndividueelProject
 
             }
 
+
+            LvOverzicht.ItemsSource = null;
+            StockView stockView2 = new StockView();
+            LvOverzicht.ItemsSource = stockView2.AllStock;
 
         }
 
@@ -1432,21 +1468,38 @@ namespace IndividueelProject
             listViewSortCol = column;
             lvOverzichtOrders.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
-        private void lvOverzichtHeader_Click(object sender, RoutedEventArgs e)
+        private void Header_Click(object sender, RoutedEventArgs e)
         {
+
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
             string sortBy = column.Tag.ToString();
-            if (listViewSortCol != null)
+            MessageBox.Show("entered");
+            if (listViewSortCol1 != null)
             {
                 LvOverzicht.Items.SortDescriptions.Clear();
+                MessageBox.Show("null");
             }
 
             ListSortDirection newDir = ListSortDirection.Ascending;
-            if (listViewSortCol == column)
+            if (listViewSortCol1 == column)
+            {
                 newDir = ListSortDirection.Descending;
+                MessageBox.Show("sorted");
+            }
 
-            listViewSortCol = column;
+            listViewSortCol1 = column;
             LvOverzicht.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            Close();
+        }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 

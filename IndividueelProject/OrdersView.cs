@@ -63,7 +63,7 @@ namespace IndividueelProject
         }
         private decimal GetTotal(decimal price, decimal profit, decimal tax, int qty)
         {
-            return ((price + profit) + ((price + profit) * (tax / 100))) * qty;
+            return Math.Round(((price + profit) + ((price + profit) * (tax / 100))) * qty,2);
         }
     }
     public class OrderLine

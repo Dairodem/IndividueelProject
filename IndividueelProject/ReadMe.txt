@@ -79,6 +79,10 @@ donderdag 29/10
 	-template kan worden ingelezen om prijs van product aan te passen
 	-bij het aankopen wordt de bestelling gewist wnr men verandert van leverancier
 	-data naar Db en stock wordt aangepast bij bestelling leverancier
+	-pdf bestand afgewerkt
+	-gebruiker kan in en uitloggen
+	-gehele opmaak verbeterd
+	-sorteren nog eens geprobeerd, bij orders lukt dit al maar bij de rest niet
 
 
 

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Background="Gray"
         FontWeight="Bold"
-        Title="Car Parts Warehouse" Height="500" Width="900" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
+        Title="Car Parts Warehouse" Height="500" Width="950" WindowStartupLocation="CenterOwner" Icon="Images/warehouse_icon.png" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged">
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,6 +25,10 @@
         <!--Menu-->
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <MenuItem Header="File"/>
+            <MenuItem Header="Gebruiker">
+                <MenuItem Header="Afmelden" Click="Logout_Click"/>
+                <MenuItem Header="Afsluiten" Click="Exit_Click"/>
+            </MenuItem>
         </Menu>
 
         <!--Header-->
@@ -40,8 +44,8 @@
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -51,53 +55,53 @@
                     </Grid.RowDefinitions>
 
                     <!--Listview van geselecteerd overzicht-->
-                    <ListView x:Name="LvOverzicht" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                    <ListView x:Name="LvOverzicht" Grid.Column="2" Grid.Row="1" Background="#FFBAB39A" FontWeight="Medium">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn x:Name="colID" Width="auto">
                                 <GridViewColumn.Header >
-                                    <GridViewColumnHeader x:Name="h0" Tag="Id" Click="lvOverzichtHeader_Click" >ID</GridViewColumnHeader>
+                                    <GridViewColumnHeader x:Name="h0" Tag="Id" Click="Header_Click" >Id</GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col1" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h1" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h1" Tag="a" Click="Header_Click" >Naam</GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col2" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h2" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h2" Tag="b" Click="Header_Click" > </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col3" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h3" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h3" Tag="c" Click="Header_Click" > </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col4" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h4" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h4" Tag="v" Click="Header_Click" > </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col5" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h5" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h5" Tag="e" Click="Header_Click" > </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn x:Name="col6" Width="auto">
                                 <GridViewColumn.Header >
-                                        <GridViewColumnHeader x:Name="h6" Tag="Id" Click="lvOverzichtHeader_Click" > </GridViewColumnHeader>
+                                        <GridViewColumnHeader x:Name="h6" Tag="f" Click="Header_Click" > </GridViewColumnHeader>
                                 </GridViewColumn.Header>
                                 </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
 
-                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="5,20,0,0">
-                        <TextBlock Text="Overzicht van"/>
-                        <ComboBox x:Name="CbxOverzicht" SelectionChanged="CbxOverzicht_SelectionChanged"/>
-                        <TextBlock Text="Sorteren op" Margin="0,5,0,0"/>
-                        <ComboBox x:Name="CbxSort" SelectionChanged="CbxSort_SelectionChanged"/>
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,0,5,0" Background="#FFAB9E74">
+                        <TextBlock Text="Overzicht van" Margin="5,20,5,5"/>
+                        <ComboBox x:Name="CbxOverzicht" SelectionChanged="CbxOverzicht_SelectionChanged" Margin="5,0"/>
+                        <TextBlock Text="Sorteren op" Margin="5,10,5,5"/>
+                        <ComboBox x:Name="CbxSort" SelectionChanged="CbxSort_SelectionChanged" Margin="5,0"/>
 
                     </StackPanel>
                 </Grid>
@@ -120,7 +124,7 @@
                     <TabControl Grid.Column="1" Grid.Row="1" Background="Gray" BorderBrush="White" BorderThickness="2">
 
                         <!--Aankoop tab -->
-                        <TabItem x:Name="tabAankoop" Header="Aankoop" Width="250" BorderBrush="#FFD02B2B" Background="#FFAA8D33">
+                        <TabItem x:Name="tabAankoop" Header="Aankoop" Width="250" BorderBrush="#FFD02B2B" Background="#FFAA8D33" Height="25">
                             <Grid Background="Gray" Margin="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2"/>
@@ -136,13 +140,13 @@
                                 </Grid.RowDefinitions>
                                 
                                 <!--Selectie Aankoop bij-->
-                                <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
+                                <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAB9E74">
                                     <TextBlock Text="Aankoop bij:" Margin="5,10,5,5"/>
                                     <ComboBox x:Name="cbAankoopBij" Margin="5" Width="150" SelectionChanged="cbAankoopBij_SelectionChanged"/>
                                 </StackPanel>
                                 
                                 <!--Filters grid-->
-                                <Grid Grid.Column="1" Grid.Row="2" Margin="0,5,0,0" Background="#FFAA8D33">
+                                <Grid Grid.Column="1" Grid.Row="2" Margin="0,5,0,0" Background="#FFAB9E74">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="auto"/>
@@ -158,12 +162,12 @@
                                     </Grid.RowDefinitions>
 
 
-                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="Filters"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text=""/>
 
                                 </Grid>
 
                                 <!--Main Grid-->
-                                <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Background="#FFAD9C69" Margin="5,0,0,0">
+                                <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Background="#FFAB9E74" Margin="5,0,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="*"/>
@@ -179,7 +183,7 @@
                                     </Grid.RowDefinitions>
                                     
                                     <!--Producten lijst-->
-                                    <ListView x:Name="LvOverzichtAankoop1" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                    <ListView x:Name="LvOverzichtAankoop1" Grid.Column="1" Grid.Row="1" Background="#FFBAB39A" FontWeight="Medium">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Naam}" Header="Product" Width="150"/>
@@ -234,7 +238,7 @@
                                                     <RowDefinition Height="auto"/>
                                                 </Grid.RowDefinitions>
                                                 
-                                                <ListView x:Name="LvOverzichtAankoop2" ItemsSource="{Binding order.LineList}" Grid.Column="0" Grid.Row="0" Background="#FFD3C69E" FontWeight="Medium" FontSize="12">
+                                                <ListView x:Name="LvOverzichtAankoop2" ItemsSource="{Binding order.LineList}" Grid.Column="0" Grid.Row="0" Background="#FFBAB39A" FontWeight="Medium" FontSize="12">
                                                     <ListView.View>
                                                         <GridView>
                                                             <GridViewColumn x:Name="col1CartA" DisplayMemberBinding="{Binding Product.Naam}" Header="Product" Width="auto"/>
@@ -280,7 +284,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!--plaats waar nieuwe orders komen-->
-                                <Grid Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
+                                <Grid Grid.Column="1" Grid.Row="1" Background="#FFAB9E74">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
@@ -288,7 +292,7 @@
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <ListView Name="lvOrders" Grid.Column="0" Grid.Row="0" Background="#FFAD9C69" Margin="5" FontWeight="Normal">
+                                    <ListView Name="lvOrders" Grid.Column="0" Grid.Row="0" Background="#FFAB9E74" Margin="5" FontWeight="Normal">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn DisplayMemberBinding="{Binding OrderedBy}" Header="Openstaande orders" Width="140" />
@@ -303,7 +307,7 @@
                                 </Grid>
                                 
                                 <!--Main Grid-->
-                                <Grid Grid.Column="2" Grid.Row="1" Background="#FFAD9C69" Margin="5,0,0,0">
+                                <Grid Grid.Column="2" Grid.Row="1" Background="#FFAB9E74" Margin="5,0,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="*"/>
@@ -319,7 +323,7 @@
                                     </Grid.RowDefinitions>
 
                                     <!--Producten lijst-->
-                                    <ListView x:Name="LvOverzichtVerkoop" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                    <ListView x:Name="LvOverzichtVerkoop" Grid.Column="1" Grid.Row="1" Background="#FFBAB39A" FontWeight="Medium">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn DisplayMemberBinding="{Binding Product.Naam}" Header="Product" Width="250"/>
@@ -350,7 +354,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!--binnenkomende orderlijst-->
-                                <ListView x:Name="lvOverzichtOrders" Grid.Column="1" Grid.Row="1" Background="#FFD3C69E" FontWeight="Medium">
+                                <ListView x:Name="lvOverzichtOrders" Grid.Column="1" Grid.Row="1" Background="#FFBAB39A" FontWeight="Medium">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn DisplayMemberBinding="{Binding InOut}" Width="50">
@@ -390,8 +394,8 @@
                 <Grid Background="Gray" Margin="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -403,7 +407,7 @@
                     </Grid.RowDefinitions>
 
                     <!--Checkboxes (nieuw of bewerk)-->
-                    <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAA8D33">
+                    <StackPanel Grid.Column="1" Grid.Row="1" Background="#FFAB9E74">
                         <RadioButton GroupName="group1" x:Name="rbNew" Content="Nieuw" Margin="5" Checked="rbNew_Checked"/>
                         <RadioButton GroupName="group1" x:Name="rbChange" Margin="5" Checked="rbChange_Checked">
                             <WrapPanel>
@@ -416,7 +420,7 @@
                     </StackPanel>
 
                     <!--Checkboxes (wat aan te passen)-->
-                    <StackPanel Grid.Column="1" Grid.Row="2" Background="#FFAA8D33" Margin="0,5,0,0">
+                    <StackPanel Grid.Column="1" Grid.Row="2" Background="#FFAB9E74" Margin="0,5,0,0">
                         <RadioButton GroupName = "group2" x:Name="rbCust" Content="Klant" Margin="5,20,5,5" Checked="rbCust_Checked"/>
                         <RadioButton GroupName = "group2" x:Name="rbDealer" Content="Leverancier" Margin="5" Checked="rbDealer_Checked"/>
                         <RadioButton GroupName = "group2" x:Name="rbProd" Content="Product" Margin="5" Checked="rbProd_Checked"/>
@@ -425,7 +429,7 @@
                     </StackPanel>
 
                     <!--Verwijder knop-->
-                    <StackPanel Grid.Column="1" Grid.Row="3" Background="#FFAA8D33" VerticalAlignment="Bottom">
+                    <StackPanel Grid.Column="1" Grid.Row="3" Background="#FFAB9E74" VerticalAlignment="Bottom">
                         <Button x:Name="btnDelete" FontSize="10" FontWeight="Medium" Margin="5" Click="btnDelete_Click">
                             Verwijderen...
                         </Button>
@@ -434,7 +438,7 @@
 
 
                     <!--Main Grid-->
-                    <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="#FFAD9C69" Margin="5,0,0,0">
+                    <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="#FFBAB39A" Margin="5,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
