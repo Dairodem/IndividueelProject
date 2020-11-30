@@ -689,6 +689,13 @@ namespace IndividueelProject
                         ChangeColumns("Leveranciers");
                         break;
 
+                    case "Personeel":
+                        var persList = ctx.Personeelslids.Select(k => k).ToList();
+                        CbxSort.ItemsSource = sortLeverKlantDict.Keys;
+                        LvOverzicht.ItemsSource = persList;
+                        ChangeColumns("Personeel");
+                        break;
+
                     default:
                         break;
                 }
@@ -953,12 +960,12 @@ namespace IndividueelProject
                             klant.Bedrijf = Try(TxtName.Text);
                             klant.Straatnaam = Try(TxtStreet.Text);
                             klant.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
-                            klant.Bus = Try(TxtBus.Text);
+                            klant.Bus = TxtBus.Text;
                             klant.Postcode = Try(TxtPostal.Text);
                             klant.Gemeente = Try(TxtCity.Text);
                             klant.Emailadres = Try(TxtEmail.Text);
                             klant.Telefoonnummer = Try(TxtTel.Text);
-                            klant.Opmerking = Try(TxtRemark.Text);
+                            klant.Opmerking = TxtRemark.Text;
                             klant.AangemaaktOp = DpDate.SelectedDate;
 
                         }
@@ -969,12 +976,12 @@ namespace IndividueelProject
                                 Bedrijf = Try(TxtName.Text),
                                 Straatnaam = Try(TxtStreet.Text),
                                 Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                                Bus = Try(TxtBus.Text),
+                                Bus = TxtBus.Text,
                                 Postcode = Try(TxtPostal.Text),
                                 Gemeente = Try(TxtCity.Text),
                                 Emailadres = Try(TxtEmail.Text),
                                 Telefoonnummer = Try(TxtTel.Text),
-                                Opmerking = Try(TxtRemark.Text),
+                                Opmerking = TxtRemark.Text,
                                 AangemaaktOp = DpDate.SelectedDate
                             });
                         }
@@ -992,7 +999,7 @@ namespace IndividueelProject
                             dealer.Bedrijf = Try(TxtName.Text);
                             dealer.Straatnaam = Try(TxtStreet.Text);
                             dealer.Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect Huisnummer");
-                            dealer.Bus = Try(TxtBus.Text);
+                            dealer.Bus = TxtBus.Text;
                             dealer.Postcode = Try(TxtPostal.Text);
                             dealer.Gemeente = Try(TxtCity.Text);
                             dealer.Emailadres = Try(TxtEmail.Text);
@@ -1006,7 +1013,7 @@ namespace IndividueelProject
                                 Bedrijf = Try(TxtName.Text),
                                 Straatnaam = Try(TxtStreet.Text),
                                 Huisnummer = ConvertToInt(TxtNumber.Text, "Incorrect huisnummer!"),
-                                Bus = Try(TxtBus.Text),
+                                Bus = TxtBus.Text,
                                 Postcode = Try(TxtPostal.Text),
                                 Gemeente = Try(TxtCity.Text),
                                 Emailadres = Try(TxtEmail.Text),
@@ -1106,6 +1113,7 @@ namespace IndividueelProject
                 isError = false;
             }
             ClearAllText();
+            CbxOverzicht.SelectedIndex = 0;
 
         }
         private void rbChange_Checked(object sender, RoutedEventArgs e)
@@ -1312,7 +1320,11 @@ namespace IndividueelProject
                 // opslaan
                 ctx.SaveChanges();
                 MessageBox.Show("Bestelling geplaatst!");
+                stockView = new StockView();
+                LvOverzicht.ItemsSource = null;
+                LvOverzicht.ItemsSource = stockView.AllStock;
                 orderOUT.LineList.Clear();
+                LvOverzichtAankoop2.ItemsSource = null;
                 txtTotal.Text = $"€ {orderOUT.GetTotal()}";
 
             }
@@ -1439,7 +1451,6 @@ namespace IndividueelProject
                     {
                         int index = data[i].IndexOf(':') + 1;
                         price =ConvertToDecimal(data[i].Substring(index, data[i].Length - index).Trim(' '),"Prijs is niet correct!");
-                        MessageBox.Show(name);
                     }
                 }
 
